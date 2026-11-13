@@ -1,0 +1,2402 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ሰላም የውበት ሳሎን | Selam Salon Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            forest: {
+              950: '#0D2E23',
+              900: '#123C2E',
+              800: '#144535',
+              700: '#1B4D3E',
+              600: '#24634F',
+              100: '#E5EFEA',
+              50: '#F2F7F4'
+            },
+            cream: {
+              DEFAULT: '#F6F4EC',
+              dark: '#EBE7D8'
+            },
+            gold: {
+              DEFAULT: '#C89D54',
+              light: '#DFBC7D',
+              dark: '#A87F3A'
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans Ethiopic"', 'Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Noto Sans Ethiopic', 'Inter', sans-serif;
+      background-color: #123C2E;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    /* Custom scrollbar for mobile shell */
+    .app-scroll::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    .app-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .app-scroll::-webkit-scrollbar-thumb {
+      background: rgba(20, 69, 53, 0.25);
+      border-radius: 9999px;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Toggle Switch Styling */
+    .toggle-checkbox:checked {
+      right: 0;
+      border-color: #144535;
+    }
+    .toggle-checkbox:checked + .toggle-label {
+      background-color: #144535;
+    }
+    /* Smooth Sheet & Modal Animations */
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0.5; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .animate-slide-up {
+      animation: slideUp 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.2s ease-out forwards;
+    }
+    /* Desktop frame styling */
+    @media (min-width: 480px) {
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 16px;
+        background: radial-gradient(circle at top, #1B4D3E 0%, #0D2E23 100%);
+      }
+      #app-shell {
+        height: 850px;
+        max-height: 94vh;
+        border-radius: 34px;
+        border: 6px solid #0C281E;
+        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(200, 157, 84, 0.25);
+      }
+    }
+    @media (max-width: 479px) {
+      #app-shell {
+        height: 100dvh;
+        width: 100vw;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile App Shell -->
+  <div id="app-shell" class="relative w-full max-w-[430px] bg-cream dark:bg-slate-900 text-slate-800 dark:text-slate-100 flex flex-col overflow-hidden mx-auto">
+    
+    <!-- Top Offline & Quick Status Strip -->
+    <div class="bg-forest-950 text-white/90 text-[11px] px-4 py-1.5 flex items-center justify-between border-b border-white/10 shrink-0">
+      <div class="flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="offline-badge-text" class="font-medium tracking-wide">ያለ ኢንተርኔት ይሰራል • Offline Ready</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="toggleLanguage()" class="px-2 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-gold-light font-semibold transition text-[10px]">
+          <span id="lang-pill-label">EN / አማ</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Forest Green Header & KPI Banner -->
+    <header class="bg-gradient-to-b from-forest-800 to-forest-700 text-white px-4 pt-3 pb-5 rounded-b-[26px] shadow-md shrink-0 z-10">
+      <!-- Top Bar -->
+      <div class="flex items-center justify-between mb-3.5">
+        <div class="flex items-center gap-2.5">
+          <button onclick="openDrawer()" aria-label="Menu" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition active:scale-95">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10"/>
+            </svg>
+          </button>
+          <div class="flex items-center gap-2">
+            <div class="w-9 h-9 rounded-xl bg-cream flex items-center justify-center shadow-sm border border-gold/40">
+              <!-- Salon Scissors Icon -->
+              <svg class="w-5 h-5 text-forest-800" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <circle cx="6" cy="6" r="3"/>
+                <circle cx="6" cy="18" r="3"/>
+                <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+                <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+                <line x1="8.12" y1="8.12" x2="12" y2="12"/>
+              </svg>
+            </div>
+            <div>
+              <h1 id="header-salon-name" class="text-[15px] font-bold leading-tight tracking-tight text-white">ሰላም የውበት ሳሎን</h1>
+              <p id="header-subtitle" class="text-[11px] text-emerald-200/90 leading-tight">Selam Beauty Studio</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <button onclick="openQuickAddModal()" title="Quick Add" class="w-9 h-9 rounded-xl bg-gold hover:bg-gold-light text-forest-950 flex items-center justify-center shadow transition active:scale-95 font-bold">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+            </svg>
+          </button>
+          <button onclick="navigateTo('settings')" title="Settings" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition active:scale-95">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Translucent Dark Green KPI Cards (Matching Video) -->
+      <div class="grid grid-cols-4 gap-2">
+        <div onclick="navigateTo('customers')" class="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/15 rounded-2xl p-2 text-center transition">
+          <div id="kpi-customers" class="text-base font-extrabold text-white leading-tight">0</div>
+          <div data-i18n="kpiCustomers" class="text-[10px] text-emerald-100/90 mt-0.5 truncate">ደንበኞች</div>
+        </div>
+        <div onclick="navigateTo('services', 'active')" class="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/15 rounded-2xl p-2 text-center transition">
+          <div id="kpi-active" class="text-base font-extrabold text-gold-light leading-tight">0</div>
+          <div data-i18n="kpiActive" class="text-[10px] text-emerald-100/90 mt-0.5 truncate">በሂደት ላይ</div>
+        </div>
+        <div onclick="navigateTo('services', 'completed')" class="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/15 rounded-2xl p-2 text-center transition">
+          <div id="kpi-completed" class="text-base font-extrabold text-emerald-300 leading-tight">0</div>
+          <div data-i18n="kpiCompleted" class="text-[10px] text-emerald-100/90 mt-0.5 truncate">የተጠናቀቁ</div>
+        </div>
+        <div onclick="navigateTo('payments')" class="cursor-pointer bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/15 rounded-2xl p-2 text-center transition">
+          <div id="kpi-revenue" class="text-base font-extrabold text-white leading-tight">0</div>
+          <div data-i18n="kpiRevenue" class="text-[10px] text-emerald-100/90 mt-0.5 truncate">ገቢ (ብር)</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Scrollable Content Viewport -->
+    <main id="main-content" class="flex-1 overflow-y-auto app-scroll px-4 pt-4 pb-24 space-y-4">
+      <!-- Dynamic view rendered by JS -->
+    </main>
+
+    <!-- Floating Action Button (Contextual +) -->
+    <button id="fab-btn" onclick="handleFabClick()" class="fixed md:absolute bottom-20 right-5 z-20 w-13 h-13 px-4 py-3.5 rounded-2xl bg-gold hover:bg-gold-light text-forest-950 shadow-lg shadow-forest-950/25 flex items-center justify-center gap-1.5 font-bold transition transform active:scale-95">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+      </svg>
+      <span id="fab-label" class="text-xs font-extrabold hidden">አዲስ</span>
+    </button>
+
+    <!-- Fixed 5-Tab Bottom Navigation Bar -->
+    <nav class="bg-white dark:bg-slate-800 border-t border-slate-200/80 dark:border-slate-700 px-2 py-1.5 flex items-center justify-around shrink-0 z-20 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
+      <button onclick="navigateTo('home')" data-nav="home" class="nav-btn flex flex-col items-center justify-center py-1 px-2 rounded-xl transition w-16">
+        <div class="nav-icon-wrap w-8 h-7 rounded-xl flex items-center justify-center mb-0.5 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+            <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+            <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+          </svg>
+        </div>
+        <span data-i18n="navHome" class="text-[10px] font-semibold">ዋና ገጽ</span>
+      </button>
+
+      <button onclick="navigateTo('customers')" data-nav="customers" class="nav-btn flex flex-col items-center justify-center py-1 px-2 rounded-xl transition w-16">
+        <div class="nav-icon-wrap w-8 h-7 rounded-xl flex items-center justify-center mb-0.5 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <span data-i18n="navCustomers" class="text-[10px] font-semibold">ደንበኞች</span>
+      </button>
+
+      <button onclick="navigateTo('services')" data-nav="services" class="nav-btn flex flex-col items-center justify-center py-1 px-2 rounded-xl transition w-16">
+        <div class="nav-icon-wrap w-8 h-7 rounded-xl flex items-center justify-center mb-0.5 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="6" cy="6" r="3"/>
+            <circle cx="6" cy="18" r="3"/>
+            <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+            <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+          </svg>
+        </div>
+        <span data-i18n="navServices" class="text-[10px] font-semibold">ቀጠሮ/ስራ</span>
+      </button>
+
+      <button onclick="navigateTo('payments')" data-nav="payments" class="nav-btn flex flex-col items-center justify-center py-1 px-2 rounded-xl transition w-16">
+        <div class="nav-icon-wrap w-8 h-7 rounded-xl flex items-center justify-center mb-0.5 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+        <span data-i18n="navPayments" class="text-[10px] font-semibold">ክፍያ/ደረሰኝ</span>
+      </button>
+
+      <button onclick="openMoreSheet()" data-nav="more" class="nav-btn flex flex-col items-center justify-center py-1 px-2 rounded-xl transition w-16">
+        <div class="nav-icon-wrap w-8 h-7 rounded-xl flex items-center justify-center mb-0.5 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"/>
+          </svg>
+        </div>
+        <span data-i18n="navMore" class="text-[10px] font-semibold">ተጨማሪ</span>
+      </button>
+    </nav>
+
+    <!-- Side Navigation Drawer (Matching Video Step 3) -->
+    <div id="side-drawer" class="fixed md:absolute inset-0 z-40 hidden">
+      <div onclick="closeDrawer()" class="absolute inset-0 bg-black/50 backdrop-blur-[1px]"></div>
+      <div class="relative w-72 max-w-[82%] h-full bg-cream dark:bg-slate-900 shadow-2xl flex flex-col animate-fade-in">
+        <div class="bg-forest-800 text-white p-5 rounded-br-3xl">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-11 h-11 rounded-2xl bg-cream flex items-center justify-center border border-gold">
+              <svg class="w-6 h-6 text-forest-800" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+                <line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/>
+              </svg>
+            </div>
+            <button onclick="closeDrawer()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white">✕</button>
+          </div>
+          <div id="drawer-salon-title" class="font-bold text-base">ሰላም የውበት ሳሎን</div>
+          <div class="text-xs text-emerald-200 mt-0.5">Beauty Salon • Offline App</div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-3 space-y-1 text-sm">
+          <button onclick="navigateTo('home'); closeDrawer();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-forest-100 dark:hover:bg-slate-800 font-semibold text-left">
+            <span>🏠</span> <span data-i18n="navHome">ዋና ገጽ (Dashboard)</span>
+          </button>
+          <button onclick="navigateTo('customers'); closeDrawer();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-forest-100 dark:hover:bg-slate-800 font-semibold text-left">
+            <span>👥</span> <span data-i18n="navCustomers">ደንበኞች (Customers)</span>
+          </button>
+          <button onclick="navigateTo('services'); closeDrawer();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-forest-100 dark:hover:bg-slate-800 font-semibold text-left">
+            <span>✂️</span> <span data-i18n="navServices">ቀጠሮ እና ስራዎች</span>
+          </button>
+          <button onclick="navigateTo('payments'); closeDrawer();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-forest-100 dark:hover:bg-slate-800 font-semibold text-left">
+            <span>🧾</span> <span data-i18n="navPayments">ክፍያ እና ደረሰኝ</span>
+          </button>
+          <div class="border-t border-slate-200 dark:border-slate-700 my-2"></div>
+          <button onclick="navigateTo('inventory'); closeDrawer();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-forest-100 dark:hover:bg-slate-800 font-semibold text-left">
+            <span>🧴</span> <span data-i18n="modInventory">የዕቃ ክምችት (Stock)</span>
+          </button>
+          <button onclick="navigateTo('expenses'); closeDrawer();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-forest-100 dark:hover:bg-slate-800 font-semibold text-left">
+            <span>💰</span> <span data-i18n="modExpenses">ወጪ እና ትርፍ</span>
+          </button>
+          <button onclick="navigateTo('gallery'); closeDrawer();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-forest-100 dark:hover:bg-slate-800 font-semibold text-left">
+            <span>💇‍♀️</span> <span data-i18n="modGallery">ስታይል ማሳያ (Gallery)</span>
+          </button>
+          <button onclick="navigateTo('reports'); closeDrawer();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-forest-100 dark:hover:bg-slate-800 font-semibold text-left">
+            <span>📊</span> <span data-i18n="modReports">ሪፖርት (Reports)</span>
+          </button>
+          <button onclick="navigateTo('notifications'); closeDrawer();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-forest-100 dark:hover:bg-slate-800 font-semibold text-left">
+            <span>🔔</span> <span data-i18n="modNotifications">ማንቂያዎች (Notifications)</span>
+          </button>
+          <button onclick="navigateTo('settings'); closeDrawer();" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-forest-100 dark:hover:bg-slate-800 font-semibold text-left">
+            <span>⚙️</span> <span data-i18n="modSettings">ቅንብሮች (Settings)</span>
+          </button>
+        </div>
+
+        <div class="p-3.5 border-t border-slate-200 dark:border-slate-700 text-[11px] text-slate-500 flex items-center justify-between">
+          <span>Selam Salon v2.5</span>
+          <span class="text-forest-700 dark:text-emerald-400 font-semibold">● Local Storage</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Sheet / Modal Container -->
+    <div id="modal-backdrop" class="fixed md:absolute inset-0 z-50 hidden flex flex-col justify-end">
+      <div onclick="closeModal()" class="absolute inset-0 bg-black/55 backdrop-blur-[1px]"></div>
+      <div id="modal-sheet" class="relative w-full max-h-[88%] bg-white dark:bg-slate-800 rounded-t-[28px] shadow-2xl flex flex-col overflow-hidden animate-slide-up">
+        <!-- Dynamic modal content -->
+      </div>
+    </div>
+
+    <!-- Center Confirmation Dialog (For Mark Completed / Pay Balance / Delete) -->
+    <div id="confirm-backdrop" class="fixed md:absolute inset-0 z-50 hidden items-center justify-center p-5">
+      <div onclick="closeConfirm()" class="absolute inset-0 bg-black/55 backdrop-blur-[1px]"></div>
+      <div id="confirm-box" class="relative w-full max-w-[330px] bg-white dark:bg-slate-800 rounded-3xl p-5 shadow-2xl text-center animate-fade-in">
+        <!-- Dynamic confirm content -->
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed md:absolute top-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300">
+      <div id="toast-msg" class="bg-forest-950 text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-lg border border-gold/40 whitespace-nowrap">
+        ተሳክቷል!
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. BILINGUAL DICTIONARY (AMHARIC & ENGLISH)
+    // =========================================================================
+    const I18N = {
+      am: {
+        kpiCustomers: "ደንበኞች",
+        kpiActive: "በሂደት ላይ",
+        kpiCompleted: "የተጠናቀቁ",
+        kpiRevenue: "ገቢ (ብር)",
+        navHome: "ዋና ገጽ",
+        navCustomers: "ደንበኞች",
+        navServices: "ቀጠሮ/ስራ",
+        navPayments: "ክፍያ/ደረሰኝ",
+        navMore: "ተጨማሪ",
+        modInventory: "የዕቃ ክምችት",
+        modExpenses: "ወጪ እና ትርፍ",
+        modGallery: "ስታይል ማሳያ",
+        modReports: "ሪፖርት",
+        modNotifications: "ማንቂያዎች",
+        modSettings: "ቅንብሮች",
+        welcomeTitle: "እንኳን ደህና መጡ!",
+        welcomeSub: "የዛሬ የሳሎን እንቅስቃሴ እና ቀጠሮዎች",
+        urgentAlerts: "አስቸኳይ ማስታወሻዎች",
+        completionRate: "የስራ አፈጻጸም",
+        recentServices: "የቅርብ ጊዜ ቀጠሮዎች እና ስራዎች",
+        seeAll: "ሁሉንም ይዩ",
+        searchCustomer: "በስም ወይም ስልክ ይፈልጉ...",
+        searchService: "ደንበኛ ወይም አገልግሎት ይፈልጉ...",
+        filterAll: "ሁሉም",
+        filterWaiting: "በመጠባበቅ ላይ",
+        filterProgress: "በመሰራት ላይ",
+        filterCompleted: "የተጠናቀቀ",
+        filterUnpaid: "ቀሪ ክፍያ ያለው",
+        newCustomer: "አዲስ ደንበኛ መመዝገብ",
+        fullName: "ሙሉ ስም *",
+        phoneNumber: "ስልክ ቁጥር *",
+        optionalDetails: "ተጨማሪ መረጃ (አማራጭ)",
+        nickname: "ቅጽል ስም",
+        address: "አድራሻ",
+        hairType: "የፀጉር አይነት",
+        hairLength: "የፀጉር ርዝመት",
+        hairDensity: "የፀጉር ብዛት/ውፍረት",
+        hairColor: "የፀጉር ቀለም",
+        productPref: "ተመራጭ ምርት",
+        notes: "ማስታወሻ",
+        saveCustomer: "ደንበኛ አስቀምጥ",
+        newService: "አዲስ ቀጠሮ / ስራ",
+        selectCustomer: "ደንበኛ ይምረጡ *",
+        serviceType: "የአገልግሎት አይነት *",
+        stylistName: "ባለሙያ / ስታይሊስት",
+        totalPrice: "ጠቅላላ ዋጋ (ብር) *",
+        advancePaid: "ቅድመ ክፍያ (ብር)",
+        remainingBalance: "ቀሪ ክፍያ",
+        appointmentDate: "ቀን",
+        appointmentTime: "ሰዓት",
+        status: "ሁኔታ",
+        saveService: "ቀጠሮ አስቀምጥ",
+        receipt: "ደረሰኝ",
+        sendReceipt: "ደረሰኝ ላክ",
+        payRemaining: "ቀሪ ክፍያ ክፈል",
+        markCompleted: "አገልግሎቱ ተጠናቋል",
+        birr: "ብር",
+        paidInFull: "ሙሉ በሙሉ ተከፍሏል",
+        thankYou: "እናመሰግናለን! በድጋሚ ይምጡ።",
+        copyText: "ቅዳ",
+        cancel: "ሰርዝ",
+        confirm: "አረጋግጥ"
+      },
+      en: {
+        kpiCustomers: "Customers",
+        kpiActive: "Active",
+        kpiCompleted: "Completed",
+        kpiRevenue: "Revenue",
+        navHome: "Home",
+        navCustomers: "Customers",
+        navServices: "Services",
+        navPayments: "Receipts",
+        navMore: "More",
+        modInventory: "Inventory",
+        modExpenses: "Expenses",
+        modGallery: "Style Gallery",
+        modReports: "Reports",
+        modNotifications: "Notifications",
+        modSettings: "Settings",
+        welcomeTitle: "Welcome Back!",
+        welcomeSub: "Today's salon schedule & summary",
+        urgentAlerts: "Priority Reminders",
+        completionRate: "Completion Rate",
+        recentServices: "Recent Appointments & Services",
+        seeAll: "See All",
+        searchCustomer: "Search by name or phone...",
+        searchService: "Search customer or service...",
+        filterAll: "All",
+        filterWaiting: "Waiting",
+        filterProgress: "In Progress",
+        filterCompleted: "Completed",
+        filterUnpaid: "Unpaid Balance",
+        newCustomer: "Register New Customer",
+        fullName: "Full Name *",
+        phoneNumber: "Phone Number *",
+        optionalDetails: "Additional Details (Optional)",
+        nickname: "Nickname",
+        address: "Address",
+        hairType: "Hair Type",
+        hairLength: "Hair Length",
+        hairDensity: "Hair Density",
+        hairColor: "Hair Color",
+        productPref: "Product Preference",
+        notes: "Notes",
+        saveCustomer: "Save Customer",
+        newService: "New Appointment / Service",
+        selectCustomer: "Select Customer *",
+        serviceType: "Service Type *",
+        stylistName: "Stylist Name",
+        totalPrice: "Total Price (ETB) *",
+        advancePaid: "Advance Paid (ETB)",
+        remainingBalance: "Remaining Balance",
+        appointmentDate: "Date",
+        appointmentTime: "Time",
+        status: "Status",
+        saveService: "Save Appointment",
+        receipt: "Receipt",
+        sendReceipt: "Send Receipt",
+        payRemaining: "Pay Balance",
+        markCompleted: "Service Completed",
+        birr: "ETB",
+        paidInFull: "Paid in Full",
+        thankYou: "Thank you for visiting us!",
+        copyText: "Copy",
+        cancel: "Cancel",
+        confirm: "Confirm"
+      }
+    };
+
+    // =========================================================================
+    // 2. INITIAL DEMO DATA & LOCALSTORAGE PERSISTENCE
+    // =========================================================================
+    const STORAGE_KEY = 'selam_salon_atelier_v2';
+
+    const DEFAULT_DATA = {
+      settings: {
+        salonNameAm: 'ሰላም የውበት ሳሎን',
+        salonNameEn: 'Selam Beauty Studio',
+        lang: 'am',
+        theme: 'light',
+        autoNotifyCompleted: true,
+        autoNotifyReminder: true,
+        autoNotifyBalance: true
+      },
+      customers: [
+        {
+          id: 'c1',
+          name: 'ሰላማዊት አለሙ',
+          phone: '0911234567',
+          nickname: 'ሰላም',
+          address: 'ቦሌ፣ አዲስ አበባ',
+          hairType: 'ተፈጥሯዊ ጥቅልል (Natural Curly)',
+          hairLength: 'ረጅም (Long)',
+          hairDensity: 'ወፍራም (Thick)',
+          hairColor: 'ጥቁር (Natural Black)',
+          productPref: 'Shea Moisture & Argan Oil',
+          notes: 'ለስላሳ ሙቀት ትመርጣለች',
+          createdAt: '2026-11-01'
+        },
+        {
+          id: 'c2',
+          name: 'ዮርዳኖስ ተመስገን',
+          phone: '0922345678',
+          nickname: 'ዮርዲ',
+          address: 'ሲኤምሲ (CMC)',
+          hairType: 'ለስላሳ (Silky / Relaxed)',
+          hairLength: 'መካከለኛ (Medium)',
+          hairDensity: 'መካከለኛ (Medium)',
+          hairColor: 'ቡናማ (Dark Brown)',
+          productPref: 'Keratin Serum',
+          notes: 'ቅዳሜ ጠዋት ቀጠሮ ትወዳለች',
+          createdAt: '2026-11-04'
+        },
+        {
+          id: 'c3',
+          name: 'ቤተልሔም አበበ',
+          phone: '0933456789',
+          nickname: 'ቤቲ',
+          address: 'ካዛንቺስ',
+          hairType: 'ተፈጥሯዊ (4C Natural)',
+          hairLength: 'መካከለኛ (Medium)',
+          hairDensity: 'ወፍራም (Thick)',
+          hairColor: 'ጥቁር',
+          productPref: 'Coconut Oil & Leave-in',
+          notes: 'ሹሩባ እና ዊግ መስራት ትወዳለች',
+          createdAt: '2026-11-07'
+        },
+        {
+          id: 'c4',
+          name: 'ሜሮን ታደሰ',
+          phone: '0944567890',
+          nickname: '',
+          address: 'ፒያሳ / አራት ኪሎ',
+          hairType: 'ቀጥ ያለ (Straight)',
+          hairLength: 'ረጅም (Long)',
+          hairDensity: 'ስስ (Fine)',
+          hairColor: 'ጥቁር',
+          productPref: 'Olaplex Treatment',
+          notes: 'የጥፍር እና የፊት ቆዳ እንክብካቤ ደንበኛ',
+          createdAt: '2026-11-10'
+        },
+        {
+          id: 'c5',
+          name: 'ሃና ግርማ',
+          phone: '0955678901',
+          nickname: 'ሃኒ',
+          address: 'ገርጂ',
+          hairType: 'ተፈጥሯዊ (Natural)',
+          hairLength: 'አጭር (Short)',
+          hairDensity: 'መካከለኛ',
+          hairColor: 'ጥቁር እና ሃይላይት',
+          productPref: 'Moroccanoil',
+          notes: 'የሰርግ ሜካፕ እና ፀጉር ፓኬጅ',
+          createdAt: '2026-11-12'
+        }
+      ],
+      services: [
+        {
+          id: 's1',
+          receiptNo: '0005',
+          customerId: 'c1',
+          serviceName: 'የፀጉር ስራ እና ትሪትመንት (Hair Styling)',
+          stylist: 'ሰላም',
+          price: 1500,
+          advance: 1000,
+          date: '2026-11-13',
+          time: '10:30',
+          status: 'progress',
+          notes: 'Deep conditioning + Blow dry'
+        },
+        {
+          id: 's2',
+          receiptNo: '0004',
+          customerId: 'c2',
+          serviceName: 'ሹሩባ እና ኤክስቴንሽን (Knotless Braids)',
+          stylist: 'ትዕግስት',
+          price: 2200,
+          advance: 1500,
+          date: '2026-11-13',
+          time: '14:00',
+          status: 'waiting',
+          notes: 'መካከለኛ ርዝመት ሹሩባ'
+        },
+        {
+          id: 's3',
+          receiptNo: '0003',
+          customerId: 'c3',
+          serviceName: 'የሙሽራ ሜካፕ እና ፀጉር (Bridal Makeup)',
+          stylist: 'ሰላም',
+          price: 4500,
+          advance: 4500,
+          date: '2026-11-12',
+          time: '09:00',
+          status: 'completed',
+          notes: 'ሙሉ ፓኬጅ ተጠናቋል'
+        },
+        {
+          id: 's4',
+          receiptNo: '0002',
+          customerId: 'c4',
+          serviceName: 'የጥፍር ውበት (Gel Manicure & Nail Art)',
+          stylist: 'መቅደስ',
+          price: 900,
+          advance: 500,
+          date: '2026-11-13',
+          time: '16:00',
+          status: 'progress',
+          notes: 'French tip gel'
+        },
+        {
+          id: 's5',
+          receiptNo: '0001',
+          customerId: 'c5',
+          serviceName: 'የፊት ቆዳ እንክብካቤ (Glow Facial)',
+          stylist: 'ትዕግስት',
+          price: 1200,
+          advance: 1200,
+          date: '2026-11-11',
+          time: '11:00',
+          status: 'completed',
+          notes: ''
+        }
+      ],
+      inventory: [
+        { id: 'i1', name: 'Argan Oil Shampoo (1L)', category: 'የፀጉር ምርት', qty: 8, minQty: 3, unit: 'ጠርሙስ' },
+        { id: 'i2', name: 'Shea Butter Deep Conditioner', category: 'ትሪትመንት', qty: 2, minQty: 4, unit: 'ዕቃ' },
+        { id: 'i3', name: 'Expression Braiding Hair (Black)', category: 'ሹሩባ', qty: 18, minQty: 5, unit: 'ፓኬት' },
+        { id: 'i4', name: 'Gel Nail Polish Set', category: 'የጥፍር ውበት', qty: 12, minQty: 4, unit: 'ፍሬ' },
+        { id: 'i5', name: 'Heat Protectant Spray', category: 'የፀጉር ምርት', qty: 2, minQty: 3, unit: 'ጠርሙስ' }
+      ],
+      expenses: [
+        { id: 'e1', title: 'የሳሎን ቤት ኪራይ (ወርሃዊ)', category: 'ኪራይ', amount: 12000, date: '2026-11-01' },
+        { id: 'e2', title: 'የፀጉር ትሪትመንት እና ሻምፖ ግዢ', category: 'ዕቃ ግዢ', amount: 3400, date: '2026-11-05' },
+        { id: 'e3', title: 'መብራት እና ውሃ ክፍያ', category: 'አገልግሎት', amount: 850, date: '2026-11-08' }
+      ],
+      gallery: [
+        {
+          id: 'g1',
+          folder: 'ሹሩባ (Braids)',
+          title: 'Knotless Boho Braids',
+          stylist: 'ትዕግስት',
+          price: '2,200 ብር',
+          color: '#1B4D3E',
+          emoji: ' braids '
+        },
+        {
+          id: 'g2',
+          folder: 'የፀጉር ስታይል (Hairstyles)',
+          title: 'Silk Press & Soft Curls',
+          stylist: 'ሰላም',
+          price: '1,500 ብር',
+          color: '#C89D54',
+          emoji: ' curls '
+        },
+        {
+          id: 'g3',
+          folder: 'ሜካፕ (Makeup)',
+          title: 'Soft Glam Bridal Look',
+          stylist: 'ሰላም',
+          price: '4,500 ብር',
+          color: '#7C3AED',
+          emoji: ' glam '
+        },
+        {
+          id: 'g4',
+          folder: 'ጥፍር (Nail Art)',
+          title: 'Gold Leaf French Gel',
+          stylist: 'መቅደስ',
+          price: '900 ብር',
+          color: '#0D9488',
+          emoji: ' nails '
+        }
+      ]
+    };
+
+    let state = loadState();
+    let currentTab = 'home';
+    let serviceFilter = 'all';
+    let searchQuery = '';
+    let reportRange = 'month';
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          return { ...DEFAULT_DATA, ...parsed };
+        }
+      } catch (e) {
+        console.error('Failed to load state:', e);
+      }
+      return JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        updateHeaderAndKPIs();
+      } catch (e) {
+        console.error('Failed to save state:', e);
+      }
+    }
+
+    function t(key) {
+      const lang = state.settings.lang || 'am';
+      return (I18N[lang] && I18N[lang][key]) || I18N['am'][key] || key;
+    }
+
+    // =========================================================================
+    // 3. HELPERS (PHONE FORMATTING FOR ETHIOPIA, INITIALS, TOAST)
+    // =========================================================================
+    function formatEthiopianWhatsAppPhone(phone) {
+      let digits = (phone || '').replace(/\D/g, '');
+      if (digits.startsWith('09') || digits.startsWith('07')) {
+        return '251' + digits.substring(1);
+      }
+      if (digits.startsWith('9') || digits.startsWith('7')) {
+        return '251' + digits;
+      }
+      if (digits.startsWith('251')) {
+        return digits;
+      }
+      return digits;
+    }
+
+    function getInitials(name) {
+      if (!name) return 'SS';
+      const parts = name.trim().split(/\s+/);
+      if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+
+    function formatMoney(num) {
+      return Number(num || 0).toLocaleString();
+    }
+
+    function getCustomerById(id) {
+      return state.customers.find(c => c.id === id) || { name: 'ያልታወቀ ደንበኛ', phone: '' };
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      toastMsg.textContent = msg;
+      toast.classList.remove('opacity-0', '-translate-y-2');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-2');
+      }, 2400);
+    }
+
+    // =========================================================================
+    // 4. HEADER, KPIS, THEME & LANGUAGE SYNC
+    // =========================================================================
+    function updateHeaderAndKPIs() {
+      const lang = state.settings.lang;
+      document.documentElement.lang = lang;
+
+      // Apply theme
+      if (state.settings.theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      // Header Salon Title
+      const salonTitle = lang === 'am' ? state.settings.salonNameAm : state.settings.salonNameEn;
+      document.getElementById('header-salon-name').textContent = salonTitle;
+      document.getElementById('drawer-salon-title').textContent = salonTitle;
+      document.getElementById('lang-pill-label').textContent = lang === 'am' ? 'English' : 'አማርኛ';
+
+      // Translate static data-i18n attributes
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        el.textContent = t(key);
+      });
+
+      // Calculate KPIs
+      const totalCustomers = state.customers.length;
+      const activeServices = state.services.filter(s => s.status !== 'completed').length;
+      const completedServices = state.services.filter(s => s.status === 'completed').length;
+      const totalRevenue = state.services.reduce((sum, s) => sum + Number(s.advance || 0), 0);
+
+      document.getElementById('kpi-customers').textContent = totalCustomers;
+      document.getElementById('kpi-active').textContent = activeServices;
+      document.getElementById('kpi-completed').textContent = completedServices;
+      document.getElementById('kpi-revenue').textContent = formatMoney(totalRevenue);
+
+      // Update active nav styling
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        const target = btn.getAttribute('data-nav');
+        const iconWrap = btn.querySelector('.nav-icon-wrap');
+        const isMoreSub = ['inventory', 'expenses', 'gallery', 'reports', 'notifications', 'settings'].includes(currentTab);
+        const isActive = (target === currentTab) || (target === 'more' && isMoreSub);
+
+        if (isActive) {
+          btn.classList.add('text-forest-800', 'dark:text-gold-light');
+          btn.classList.remove('text-slate-400', 'dark:text-slate-400');
+          iconWrap.classList.add('bg-forest-100', 'dark:bg-forest-900');
+        } else {
+          btn.classList.remove('text-forest-800', 'dark:text-gold-light');
+          btn.classList.add('text-slate-400', 'dark:text-slate-400');
+          iconWrap.classList.remove('bg-forest-100', 'dark:bg-forest-900');
+        }
+      });
+
+      // Contextual FAB visibility
+      const fab = document.getElementById('fab-btn');
+      const hideFabTabs = ['payments', 'reports', 'notifications', 'settings'];
+      if (hideFabTabs.includes(currentTab)) {
+        fab.classList.add('hidden');
+      } else {
+        fab.classList.remove('hidden');
+      }
+    }
+
+    function toggleLanguage() {
+      state.settings.lang = state.settings.lang === 'am' ? 'en' : 'am';
+      saveState();
+      renderCurrentTab();
+      showToast(state.settings.lang === 'am' ? 'ቋንቋ ወደ አማርኛ ተቀይሯል' : 'Language switched to English');
+    }
+
+    function navigateTo(tab, filter = null) {
+      currentTab = tab;
+      searchQuery = '';
+      if (filter) {
+        serviceFilter = filter;
+      } else if (tab === 'services') {
+        serviceFilter = 'all';
+      }
+      updateHeaderAndKPIs();
+      renderCurrentTab();
+      document.getElementById('main-content').scrollTop = 0;
+    }
+
+    function handleFabClick() {
+      if (currentTab === 'customers') {
+        openCustomerFormModal();
+      } else if (currentTab === 'inventory') {
+        openAddInventoryModal();
+      } else if (currentTab === 'expenses') {
+        openAddExpenseModal();
+      } else if (currentTab === 'gallery') {
+        openAddGalleryModal();
+      } else {
+        openServiceFormModal();
+      }
+    }
+
+    // =========================================================================
+    // 5. MAIN TAB RENDERERS
+    // =========================================================================
+    function renderCurrentTab() {
+      const container = document.getElementById('main-content');
+      switch (currentTab) {
+        case 'home':
+          container.innerHTML = renderHomeView();
+          break;
+        case 'customers':
+          container.innerHTML = renderCustomersView();
+          break;
+        case 'services':
+          container.innerHTML = renderServicesView();
+          break;
+        case 'payments':
+          container.innerHTML = renderPaymentsView();
+          break;
+        case 'inventory':
+          container.innerHTML = renderInventoryView();
+          break;
+        case 'expenses':
+          container.innerHTML = renderExpensesView();
+          break;
+        case 'gallery':
+          container.innerHTML = renderGalleryView();
+          break;
+        case 'reports':
+          container.innerHTML = renderReportsView();
+          break;
+        case 'notifications':
+          container.innerHTML = renderNotificationsView();
+          break;
+        case 'settings':
+          container.innerHTML = renderSettingsView();
+          break;
+        default:
+          container.innerHTML = renderHomeView();
+      }
+    }
+
+    // --- 5A. HOME / DASHBOARD VIEW ---
+    function renderHomeView() {
+      const total = state.services.length || 1;
+      const completed = state.services.filter(s => s.status === 'completed').length;
+      const pct = Math.round((completed / total) * 100);
+      const unpaidServices = state.services.filter(s => (s.price - s.advance) > 0);
+      const lowStock = state.inventory.filter(i => i.qty <= i.minQty);
+
+      return `
+        <!-- Quick Actions Row -->
+        <div class="grid grid-cols-2 gap-2.5">
+          <button onclick="openCustomerFormModal()" class="bg-white dark:bg-slate-800 p-3.5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center gap-3 text-left hover:border-forest-600 transition active:scale-[0.98]">
+            <div class="w-10 h-10 rounded-xl bg-forest-100 dark:bg-forest-900 text-forest-800 dark:text-emerald-300 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-800 dark:text-white">${state.settings.lang === 'am' ? 'አዲስ ደንበኛ' : 'Add Customer'}</div>
+              <div class="text-[10px] text-slate-500">${state.settings.lang === 'am' ? 'በስም እና ስልክ ብቻ' : 'Fast 2-field form'}</div>
+            </div>
+          </button>
+
+          <button onclick="openServiceFormModal()" class="bg-white dark:bg-slate-800 p-3.5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center gap-3 text-left hover:border-gold transition active:scale-[0.98]">
+            <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-gold-light flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-800 dark:text-white">${state.settings.lang === 'am' ? 'አዲስ ቀጠሮ/ስራ' : 'Book Service'}</div>
+              <div class="text-[10px] text-slate-500">${state.settings.lang === 'am' ? 'ዋጋ እና ቀጠሮ መያዝ' : 'Schedule & price'}</div>
+            </div>
+          </button>
+        </div>
+
+        <!-- Urgent Reminders Card (Matching Video Step 1) -->
+        <div class="bg-amber-50/90 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/50 rounded-2xl p-3.5 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-amber-600 text-sm">⚠️</span>
+              <h3 class="text-xs font-bold text-amber-900 dark:text-amber-300">${t('urgentAlerts')}</h3>
+            </div>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200/70 text-amber-900">${unpaidServices.length + lowStock.length}</span>
+          </div>
+          <div class="space-y-1.5 text-xs">
+            ${unpaidServices.slice(0, 2).map(s => {
+              const cust = getCustomerById(s.customerId);
+              const rem = s.price - s.advance;
+              return `
+                <div onclick="openReceiptModal('${s.id}')" class="cursor-pointer flex items-center justify-between bg-white/80 dark:bg-slate-800/80 px-3 py-2 rounded-xl border border-amber-100 dark:border-slate-700">
+                  <div class="truncate pr-2">
+                    <span class="font-bold text-slate-800 dark:text-slate-100">${cust.name}</span>
+                    <span class="text-slate-500 text-[11px]"> • ${s.serviceName.split('(')[0]}</span>
+                  </div>
+                  <span class="text-[11px] font-bold text-rose-600 shrink-0">${state.settings.lang === 'am' ? 'ቀሪ' : 'Due'}: ${formatMoney(rem)} ${t('birr')}</span>
+                </div>
+              `;
+            }).join('')}
+            ${lowStock.slice(0, 1).map(item => `
+              <div onclick="navigateTo('inventory')" class="cursor-pointer flex items-center justify-between bg-white/80 dark:bg-slate-800/80 px-3 py-2 rounded-xl border border-amber-100 dark:border-slate-700">
+                <span class="text-slate-700 dark:text-slate-200 text-[11px] font-medium">🧴 ${item.name} (${state.settings.lang === 'am' ? 'ሊያልቅ ነው' : 'Low stock'})</span>
+                <span class="text-[11px] font-bold text-amber-700">${item.qty} ${item.unit}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Completion Progress Ring Card (Matching Video Step 1) -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 flex items-center gap-4">
+          <div class="relative w-14 h-14 rounded-full flex items-center justify-center shrink-0" style="background: conic-gradient(#144535 ${pct * 3.6}deg, #E5EFEA 0deg);">
+            <div class="w-11 h-11 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center text-xs font-extrabold text-forest-800 dark:text-emerald-300">
+              ${pct}%
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xs font-bold text-slate-800 dark:text-white">${t('completionRate')}</h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">${completed} / ${state.services.length} ${state.settings.lang === 'am' ? 'አገልግሎቶች ተጠናቀዋል' : 'services completed'}</p>
+            <div class="flex gap-2 mt-2">
+              <button onclick="navigateTo('notifications')" class="text-[10px] font-bold text-forest-800 dark:text-emerald-300 bg-forest-50 dark:bg-forest-900/50 px-2.5 py-1 rounded-lg">
+                🔔 ${state.settings.lang === 'am' ? 'ለደንበኞች ማንቂያ ላክ' : 'Send Alerts'}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Appointments & Services -->
+        <div>
+          <div class="flex items-center justify-between mb-2.5 px-0.5">
+            <h3 class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wide">${t('recentServices')}</h3>
+            <button onclick="navigateTo('services')" class="text-xs font-bold text-forest-800 dark:text-gold-light hover:underline">${t('seeAll')} →</button>
+          </div>
+          <div class="space-y-2.5">
+            ${state.services.slice(0, 4).map(s => renderServiceCard(s)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // --- 5B. CUSTOMERS VIEW ---
+    function renderCustomersView() {
+      const filtered = state.customers.filter(c =>
+        c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        c.phone.includes(searchQuery) ||
+        (c.nickname && c.nickname.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+
+      return `
+        <!-- Search Bar -->
+        <div class="relative">
+          <input type="text" value="${searchQuery}" oninput="handleSearch(this.value)" placeholder="${t('searchCustomer')}"
+            class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl pl-10 pr-4 py-3 text-xs font-medium shadow-sm focus:outline-none focus:border-forest-700" />
+          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+          </svg>
+        </div>
+
+        <div class="flex items-center justify-between px-1">
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-200">${t('navCustomers')} (${filtered.length})</span>
+          <button onclick="openCustomerFormModal()" class="text-xs font-bold text-forest-800 dark:text-gold-light flex items-center gap-1">
+            + ${state.settings.lang === 'am' ? 'አዲስ ደንበኛ' : 'New Customer'}
+          </button>
+        </div>
+
+        <div class="space-y-2.5">
+          ${filtered.length === 0 ? `
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 text-center text-slate-400 text-xs">
+              ${state.settings.lang === 'am' ? 'ምንም ደንበኛ አልተገኘም' : 'No customers found'}
+            </div>
+          ` : filtered.map(c => {
+            const visitCount = state.services.filter(s => s.customerId === c.id).length;
+            return `
+              <div onclick="openCustomerProfileModal('${c.id}')" class="cursor-pointer bg-white dark:bg-slate-800 p-3.5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:border-forest-600 transition flex items-center justify-between active:scale-[0.99]">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-11 h-11 rounded-2xl bg-forest-100 dark:bg-forest-900 text-forest-800 dark:text-emerald-300 font-extrabold text-sm flex items-center justify-center shrink-0">
+                    ${getInitials(c.name)}
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-bold text-sm text-slate-800 dark:text-white truncate">
+                      ${c.name} ${c.nickname ? `<span class="text-xs font-normal text-slate-400">(${c.nickname})</span>` : ''}
+                    </div>
+                    <div class="text-xs text-slate-500 mt-0.5 flex items-center gap-2">
+                      <span>📞 ${c.phone}</span>
+                      <span>•</span>
+                      <span class="text-forest-700 dark:text-emerald-400 font-semibold">${visitCount} ${state.settings.lang === 'am' ? 'ቀጠሮ' : 'visits'}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button onclick="event.stopPropagation(); openServiceFormModal('${c.id}')" title="Book Service" class="w-8 h-8 rounded-xl bg-cream dark:bg-slate-700 text-forest-800 dark:text-gold-light flex items-center justify-center font-bold text-sm hover:bg-forest-100">
+                    +
+                  </button>
+                  <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // --- 5C. SERVICES / APPOINTMENTS VIEW ---
+    function renderServicesView() {
+      const filters = [
+        { id: 'all', label: t('filterAll') },
+        { id: 'waiting', label: t('filterWaiting') },
+        { id: 'progress', label: t('filterProgress') },
+        { id: 'completed', label: t('filterCompleted') },
+        { id: 'unpaid', label: t('filterUnpaid') }
+      ];
+
+      const filtered = state.services.filter(s => {
+        const cust = getCustomerById(s.customerId);
+        const matchesSearch = cust.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          s.serviceName.toLowerCase().includes(searchQuery.toLowerCase());
+        if (!matchesSearch) return false;
+
+        if (serviceFilter === 'active') return s.status !== 'completed';
+        if (serviceFilter === 'waiting') return s.status === 'waiting';
+        if (serviceFilter === 'progress') return s.status === 'progress';
+        if (serviceFilter === 'completed') return s.status === 'completed';
+        if (serviceFilter === 'unpaid') return (s.price - s.advance) > 0;
+        return true;
+      });
+
+      return `
+        <!-- Search -->
+        <div class="relative">
+          <input type="text" value="${searchQuery}" oninput="handleSearch(this.value)" placeholder="${t('searchService')}"
+            class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl pl-10 pr-4 py-3 text-xs font-medium shadow-sm focus:outline-none focus:border-forest-700" />
+          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+          </svg>
+        </div>
+
+        <!-- Horizontal Filter Pills -->
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+          ${filters.map(f => {
+            const active = serviceFilter === f.id || (serviceFilter === 'active' && f.id === 'progress');
+            return `
+              <button onclick="setServiceFilter('${f.id}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition ${
+                active
+                  ? 'bg-forest-800 text-white shadow-sm'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+              }">
+                ${f.label}
+              </button>
+            `;
+          }).join('')}
+        </div>
+
+        <!-- Service Cards List -->
+        <div class="space-y-3">
+          ${filtered.length === 0 ? `
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 text-center text-slate-400 text-xs">
+              ${state.settings.lang === 'am' ? 'በዚህ ምርጫ ውስጥ ምንም ቀጠሮ/ስራ የለም' : 'No appointments in this filter'}
+            </div>
+          ` : filtered.map(s => renderServiceCard(s, true)).join('')}
+        </div>
+      `;
+    }
+
+    function renderServiceCard(s, detailed = false) {
+      const cust = getCustomerById(s.customerId);
+      const remaining = Math.max(0, Number(s.price) - Number(s.advance));
+      const isCompleted = s.status === 'completed';
+
+      const statusBadge = {
+        waiting: { bg: 'bg-amber-100 text-amber-800', text: state.settings.lang === 'am' ? 'በመጠባበቅ ላይ' : 'Waiting' },
+        progress: { bg: 'bg-sky-100 text-sky-800', text: state.settings.lang === 'am' ? 'በመሰራት ላይ' : 'In Progress' },
+        completed: { bg: 'bg-emerald-100 text-emerald-800', text: state.settings.lang === 'am' ? 'ተጠናቋል' : 'Completed' }
+      }[s.status] || { bg: 'bg-slate-100 text-slate-700', text: s.status };
+
+      return `
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-3.5 shadow-sm border border-slate-100 dark:border-slate-700 space-y-2.5">
+          <div class="flex items-start justify-between gap-2">
+            <div onclick="openReceiptModal('${s.id}')" class="cursor-pointer flex items-center gap-3 min-w-0">
+              <div class="w-10 h-10 rounded-xl bg-forest-100 dark:bg-forest-900 text-forest-800 dark:text-emerald-300 font-extrabold text-xs flex items-center justify-center shrink-0">
+                ${getInitials(cust.name)}
+              </div>
+              <div class="min-w-0">
+                <div class="font-bold text-xs text-slate-800 dark:text-white truncate">${cust.name}</div>
+                <div class="text-[11px] font-semibold text-forest-700 dark:text-gold-light truncate">${s.serviceName}</div>
+                <div class="text-[10px] text-slate-400 mt-0.5">
+                  📅 ${s.date} ${s.time ? '• ⏰ ' + s.time : ''} ${s.stylist ? '• 💇‍♀️ ' + s.stylist : ''}
+                </div>
+              </div>
+            </div>
+
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold shrink-0 ${statusBadge.bg}">
+              ${statusBadge.text}
+            </span>
+          </div>
+
+          <!-- Financial Summary Strip -->
+          <div class="bg-cream/80 dark:bg-slate-900/60 rounded-xl px-3 py-2 flex items-center justify-between text-[11px]">
+            <div>
+              <span class="text-slate-500">${state.settings.lang === 'am' ? 'ጠቅላላ' : 'Total'}:</span>
+              <span class="font-bold text-slate-800 dark:text-white">${formatMoney(s.price)}</span>
+            </div>
+            <div>
+              <span class="text-slate-500">${state.settings.lang === 'am' ? 'የተከፈለ' : 'Paid'}:</span>
+              <span class="font-bold text-emerald-700 dark:text-emerald-400">${formatMoney(s.advance)}</span>
+            </div>
+            <div>
+              <span class="text-slate-500">${state.settings.lang === 'am' ? 'ቀሪ' : 'Due'}:</span>
+              <span class="font-bold ${remaining > 0 ? 'text-rose-600' : 'text-slate-500'}">${formatMoney(remaining)}</span>
+            </div>
+          </div>
+
+          <!-- Action Row (Toggle Completed + Pay Balance + Receipt) -->
+          <div class="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-700/70">
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" ${isCompleted ? 'checked' : ''} onchange="confirmToggleServiceStatus('${s.id}', this.checked)"
+                class="w-4 h-4 accent-forest-800 rounded cursor-pointer" />
+              <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-300">${t('markCompleted')}</span>
+            </label>
+
+            <div class="flex items-center gap-1.5">
+              ${remaining > 0 ? `
+                <button onclick="confirmPayBalance('${s.id}')" class="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 text-[10px] font-bold transition">
+                  ${state.settings.lang === 'am' ? 'ቀሪ ክፈል' : 'Pay Due'}
+                </button>
+              ` : ''}
+              <button onclick="openReceiptModal('${s.id}')" class="px-2.5 py-1 rounded-lg bg-forest-800 hover:bg-forest-700 text-white text-[10px] font-bold flex items-center gap-1 transition">
+                <span>🧾</span> <span>${t('receipt')}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- 5D. PAYMENTS & RECEIPTS VIEW (Matching Video Step 27) ---
+    function renderPaymentsView() {
+      const totalCollected = state.services.reduce((sum, s) => sum + Number(s.advance || 0), 0);
+      const totalRemaining = state.services.reduce((sum, s) => sum + Math.max(0, Number(s.price) - Number(s.advance)), 0);
+
+      return `
+        <!-- Summary 2-Card Banner -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+            <div class="text-[11px] text-slate-500 font-medium">${state.settings.lang === 'am' ? 'የተሰበሰበ ገቢ' : 'Collected Revenue'}</div>
+            <div class="text-lg font-extrabold text-forest-800 dark:text-emerald-400 mt-1">${formatMoney(totalCollected)} <span class="text-xs font-semibold">${t('birr')}</span></div>
+          </div>
+          <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+            <div class="text-[11px] text-slate-500 font-medium">${state.settings.lang === 'am' ? 'ቀሪ ያልተከፈለ' : 'Pending Balance'}</div>
+            <div class="text-lg font-extrabold text-rose-600 mt-1">${formatMoney(totalRemaining)} <span class="text-xs font-semibold">${t('birr')}</span></div>
+          </div>
+        </div>
+
+        <div class="text-xs font-bold text-slate-700 dark:text-slate-200 px-1">
+          ${state.settings.lang === 'am' ? 'ደረሰኞች (ለመላክ ይጫኑ)' : 'Receipts (Tap to Share via WhatsApp/Telegram/SMS)'}
+        </div>
+
+        <div class="space-y-2.5">
+          ${state.services.map(s => {
+            const cust = getCustomerById(s.customerId);
+            const rem = Math.max(0, s.price - s.advance);
+            return `
+              <div onclick="openReceiptModal('${s.id}')" class="cursor-pointer bg-white dark:bg-slate-800 p-3.5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:border-forest-600 transition flex items-center justify-between">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-10 h-10 rounded-xl bg-forest-50 dark:bg-forest-900/60 text-forest-800 dark:text-emerald-300 flex items-center justify-center shrink-0">
+                    🧾
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-bold text-xs text-slate-800 dark:text-white truncate">
+                      ${state.settings.lang === 'am' ? 'ደረሰኝ' : 'Receipt'} #${s.receiptNo} — ${cust.name}
+                    </div>
+                    <div class="text-[11px] text-slate-500 mt-0.5">
+                      ${state.settings.lang === 'am' ? 'የተከፈለ' : 'Paid'}: <strong class="text-emerald-700">${formatMoney(s.advance)}</strong>
+                      ${rem > 0 ? ` • <span class="text-rose-600 font-semibold">${state.settings.lang === 'am' ? 'ቀሪ' : 'Due'}: ${formatMoney(rem)}</span>` : ` • <span class="text-emerald-600">✓</span>`}
+                    </div>
+                  </div>
+                </div>
+                <button class="w-9 h-9 rounded-xl bg-forest-800 text-white flex items-center justify-center shrink-0 shadow-sm">
+                  ➤
+                </button>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // --- 5E. INVENTORY / STOCK VIEW (Matching Video Steps 31-33) ---
+    function renderInventoryView() {
+      return `
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-sm font-extrabold text-slate-800 dark:text-white">${t('modInventory')}</h2>
+            <p class="text-[11px] text-slate-500">${state.settings.lang === 'am' ? 'የሳሎን ሻምፖ፣ ትሪትመንት እና የውበት ዕቃዎች ክትትል' : 'Track salon shampoos, treatments & supplies'}</p>
+          </div>
+          <button onclick="openAddInventoryModal()" class="px-3 py-2 rounded-xl bg-forest-800 text-white text-xs font-bold">+ ${state.settings.lang === 'am' ? 'አዲስ ዕቃ' : 'Add Item'}</button>
+        </div>
+
+        <div class="space-y-2.5">
+          ${state.inventory.map(item => {
+            const isLow = item.qty <= item.minQty;
+            return `
+              <div class="bg-white dark:bg-slate-800 p-3.5 rounded-2xl shadow-sm border ${isLow ? 'border-amber-300' : 'border-slate-100 dark:border-slate-700'} space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="font-bold text-xs text-slate-800 dark:text-white">${item.name}</div>
+                    <div class="text-[10px] text-slate-400">${item.category} ${isLow ? `• <span class="text-amber-600 font-bold">⚠️ ${state.settings.lang === 'am' ? 'ሊያልቅ ነው' : 'Low Stock'}</span>` : ''}</div>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-sm font-extrabold ${isLow ? 'text-amber-600' : 'text-forest-800 dark:text-emerald-300'}">${item.qty}</span>
+                    <span class="text-[10px] text-slate-500 ml-0.5">${item.unit}</span>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700">
+                  <div class="flex items-center gap-1.5">
+                    <button onclick="adjustStock('${item.id}', -1)" class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-[11px] font-bold">-1</button>
+                    <button onclick="adjustStock('${item.id}', 1)" class="px-2.5 py-1 rounded-lg bg-forest-50 text-forest-800 text-[11px] font-bold">+1</button>
+                    <button onclick="adjustStock('${item.id}', 5)" class="px-2.5 py-1 rounded-lg bg-forest-50 text-forest-800 text-[11px] font-bold">+5</button>
+                    <button onclick="adjustStock('${item.id}', 10)" class="px-2.5 py-1 rounded-lg bg-forest-50 text-forest-800 text-[11px] font-bold">+10</button>
+                  </div>
+                  <button onclick="deleteInventory('${item.id}')" class="text-slate-400 hover:text-rose-600 text-xs px-2">🗑️</button>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // --- 5F. EXPENSES & PROFIT VIEW (Matching Video Steps 34-36) ---
+    function renderExpensesView() {
+      const income = state.services.reduce((sum, s) => sum + Number(s.advance || 0), 0);
+      const expenseTotal = state.expenses.reduce((sum, e) => sum + Number(e.amount || 0), 0);
+      const profit = income - expenseTotal;
+
+      return `
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-extrabold text-slate-800 dark:text-white">${t('modExpenses')}</h2>
+          <button onclick="openAddExpenseModal()" class="px-3 py-2 rounded-xl bg-forest-800 text-white text-xs font-bold">+ ${state.settings.lang === 'am' ? 'አዲስ ወጪ' : 'Add Expense'}</button>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-100 dark:border-slate-700 text-center">
+            <div class="text-[10px] text-slate-500">${state.settings.lang === 'am' ? 'ጠቅላላ ገቢ' : 'Income'}</div>
+            <div class="text-xs font-extrabold text-emerald-700 mt-1">${formatMoney(income)}</div>
+          </div>
+          <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-100 dark:border-slate-700 text-center">
+            <div class="text-[10px] text-slate-500">${state.settings.lang === 'am' ? 'ጠቅላላ ወጪ' : 'Expenses'}</div>
+            <div class="text-xs font-extrabold text-rose-600 mt-1">${formatMoney(expenseTotal)}</div>
+          </div>
+          <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-100 dark:border-slate-700 text-center">
+            <div class="text-[10px] text-slate-500">${state.settings.lang === 'am' ? 'የተጣራ ትርፍ' : 'Net Profit'}</div>
+            <div class="text-xs font-extrabold ${profit >= 0 ? 'text-forest-800 dark:text-gold-light' : 'text-rose-600'} mt-1">${formatMoney(profit)}</div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          ${state.expenses.map(e => `
+            <div class="bg-white dark:bg-slate-800 p-3.5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center justify-between">
+              <div>
+                <div class="font-bold text-xs text-slate-800 dark:text-white">${e.title}</div>
+                <div class="text-[10px] text-slate-400 mt-0.5">${e.category} • 📅 ${e.date}</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-extrabold text-rose-600">-${formatMoney(e.amount)} ${t('birr')}</span>
+                <button onclick="deleteExpense('${e.id}')" class="text-slate-400 hover:text-rose-600 text-xs">✕</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // --- 5G. STYLE GALLERY VIEW (Matching Video Steps 38-39) ---
+    function renderGalleryView() {
+      return `
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-sm font-extrabold text-slate-800 dark:text-white">${t('modGallery')}</h2>
+            <p class="text-[11px] text-slate-500">${state.settings.lang === 'am' ? 'ለደንበኞች የሚታዩ የፀጉር እና የውበት ስታይሎች' : 'Salon hairstyle & beauty lookbook'}</p>
+          </div>
+          <button onclick="openAddGalleryModal()" class="px-3 py-2 rounded-xl bg-forest-800 text-white text-xs font-bold">+ ${state.settings.lang === 'am' ? 'ስታይል ጨምር' : 'Add Style'}</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          ${state.gallery.map(g => `
+            <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col">
+              ${g.imageUrl ? `
+                <img src="${g.imageUrl}" alt="${g.title}" class="w-full h-28 object-cover" onerror="this.style.display='none'" />
+              ` : `
+                <div class="w-full h-28 flex flex-col items-center justify-center text-white p-3 text-center" style="background: linear-gradient(135deg, ${g.color || '#144535'}, #0D2E23);">
+                  <span class="text-2xl mb-1">💇‍♀️</span>
+                  <span class="text-[10px] uppercase tracking-wider opacity-80">${g.folder}</span>
+                </div>
+              `}
+              <div class="p-3 flex-1 flex flex-col justify-between">
+                <div>
+                  <div class="text-[10px] text-gold-dark dark:text-gold-light font-bold">${g.folder}</div>
+                  <div class="font-bold text-xs text-slate-800 dark:text-white mt-0.5">${g.title}</div>
+                </div>
+                <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 dark:border-slate-700 text-[10px]">
+                  <span class="text-slate-500">👩‍🎨 ${g.stylist || 'ሰላም'}</span>
+                  <span class="font-extrabold text-forest-800 dark:text-emerald-300">${g.price}</span>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // --- 5H. REPORTS VIEW (Matching Video Steps 40-43) ---
+    function renderReportsView() {
+      const income = state.services.reduce((sum, s) => sum + Number(s.advance || 0), 0);
+      const expense = state.expenses.reduce((sum, e) => sum + Number(e.amount || 0), 0);
+      const net = income - expense;
+      const maxVal = Math.max(income, expense, 1);
+      const incPct = Math.round((income / maxVal) * 100);
+      const expPct = Math.round((expense / maxVal) * 100);
+
+      const ranges = [
+        { id: 'day', label: state.settings.lang === 'am' ? 'ቀን' : 'Day' },
+        { id: 'week', label: state.settings.lang === 'am' ? 'ሳምንት' : 'Week' },
+        { id: 'month', label: state.settings.lang === 'am' ? 'ወር' : 'Month' },
+        { id: 'year', label: state.settings.lang === 'am' ? 'ዓመት' : 'Year' }
+      ];
+
+      return `
+        <h2 class="text-sm font-extrabold text-slate-800 dark:text-white">${t('modReports')}</h2>
+
+        <!-- Period Tabs -->
+        <div class="grid grid-cols-4 gap-1.5 bg-white dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-700">
+          ${ranges.map(r => `
+            <button onclick="reportRange='${r.id}'; renderCurrentTab();" class="py-1.5 rounded-xl text-xs font-bold transition ${
+              reportRange === r.id ? 'bg-forest-800 text-white' : 'text-slate-500'
+            }">${r.label}</button>
+          `).join('')}
+        </div>
+
+        <!-- Net Profit Highlight -->
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+          <div class="text-[11px] text-slate-500">${state.settings.lang === 'am' ? 'የተጣራ ገቢ / ትርፍ' : 'Net Income / Profit'}</div>
+          <div class="text-2xl font-extrabold ${net >= 0 ? 'text-forest-800 dark:text-emerald-400' : 'text-rose-600'} mt-1">
+            ${formatMoney(net)} ${t('birr')}
+          </div>
+          <div class="text-[11px] text-slate-400 mt-1">
+            ${state.settings.lang === 'am' ? 'ገቢ' : 'Income'}: ${formatMoney(income)} • ${state.settings.lang === 'am' ? 'ወጪ' : 'Expense'}: ${formatMoney(expense)}
+          </div>
+        </div>
+
+        <!-- Visual Comparison Bar Chart -->
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 space-y-3">
+          <div class="text-xs font-bold text-slate-700 dark:text-slate-200">${state.settings.lang === 'am' ? 'ገቢ እና ወጪ ንጽጽር' : 'Income vs Expense Chart'}</div>
+          <div class="h-36 flex items-end justify-around gap-6 pt-4 pb-2 border-b border-slate-100 dark:border-slate-700">
+            <div class="flex flex-col items-center gap-1.5 w-20">
+              <span class="text-[10px] font-bold text-emerald-700">${formatMoney(income)}</span>
+              <div class="w-12 rounded-t-xl bg-forest-700 transition-all duration-500" style="height: ${Math.max(16, incPct)}px;"></div>
+              <span class="text-[11px] font-bold text-slate-600 dark:text-slate-300">${state.settings.lang === 'am' ? 'ገቢ' : 'Income'}</span>
+            </div>
+            <div class="flex flex-col items-center gap-1.5 w-20">
+              <span class="text-[10px] font-bold text-rose-600">${formatMoney(expense)}</span>
+              <div class="w-12 rounded-t-xl bg-rose-500 transition-all duration-500" style="height: ${Math.max(16, expPct)}px;"></div>
+              <span class="text-[11px] font-bold text-slate-600 dark:text-slate-300">${state.settings.lang === 'am' ? 'ወጪ' : 'Expense'}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- 5I. CUSTOMER NOTIFICATIONS & MESSAGING VIEW (User's Priority Request!) ---
+    function renderNotificationsView() {
+      return `
+        <div>
+          <h2 class="text-sm font-extrabold text-slate-800 dark:text-white">${t('modNotifications')}</h2>
+          <p class="text-[11px] text-slate-500">${state.settings.lang === 'am' ? 'ለደንበኞች በWhatsApp፣ Telegram ወይም SMS መልዕክት ይላኩ' : 'Send instant reminders via WhatsApp, Telegram or SMS'}</p>
+        </div>
+
+        <!-- Notification Automation Preferences -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-xs font-bold">${state.settings.lang === 'am' ? 'የቀጠሮ ማስታወሻ' : 'Appointment Reminder'}</div>
+              <div class="text-[10px] text-slate-400">${state.settings.lang === 'am' ? 'ቀጠሮ ከመድረሱ በፊት ለደንበኛው ማሳወቅ' : 'Remind customer before appointment'}</div>
+            </div>
+            <input type="checkbox" ${state.settings.autoNotifyReminder ? 'checked' : ''} onchange="state.settings.autoNotifyReminder=this.checked; saveState();" class="w-4 h-4 accent-forest-800" />
+          </div>
+          <div class="flex items-center justify-between border-t border-slate-100 dark:border-slate-700 pt-2.5">
+            <div>
+              <div class="text-xs font-bold">${state.settings.lang === 'am' ? 'አገልግሎት ሲጠናቀቅ' : 'Service Completed Alert'}</div>
+              <div class="text-[10px] text-slate-400">${state.settings.lang === 'am' ? 'ስራው ሲያልቅ የምስጋና መልዕክት ማዘጋጀት' : 'Notify customer when service finishes'}</div>
+            </div>
+            <input type="checkbox" ${state.settings.autoNotifyCompleted ? 'checked' : ''} onchange="state.settings.autoNotifyCompleted=this.checked; saveState();" class="w-4 h-4 accent-forest-800" />
+          </div>
+        </div>
+
+        <!-- Quick Send Notification Composer -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 space-y-3">
+          <div class="text-xs font-bold text-forest-800 dark:text-gold-light">📨 ${state.settings.lang === 'am' ? 'ለደንበኛ መልዕክት ላክ' : 'Send Customer Notification'}</div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-500 mb-1">${state.settings.lang === 'am' ? 'ደንበኛ ይምረጡ' : 'Select Customer'}</label>
+            <select id="notif-customer-select" onchange="updateNotificationPreview()" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs font-semibold">
+              ${state.customers.map(c => `<option value="${c.id}">${c.name} (${c.phone})</option>`).join('')}
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-500 mb-1">${state.settings.lang === 'am' ? 'የመልዕክት አይነት' : 'Message Template'}</label>
+            <select id="notif-template-select" onchange="updateNotificationPreview()" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs font-semibold">
+              <option value="reminder">${state.settings.lang === 'am' ? '⏰ የቀጠሮ ማስታወሻ' : '⏰ Appointment Reminder'}</option>
+              <option value="completed">${state.settings.lang === 'am' ? '✅ አገልግሎት ተጠናቋል' : '✅ Service Completed'}</option>
+              <option value="balance">${state.settings.lang === 'am' ? '💳 ቀሪ ክፍያ ማስታወሻ' : '💳 Remaining Balance Reminder'}</option>
+              <option value="promo">${state.settings.lang === 'am' ? '✨ ልዩ ቅናሽ / ሰላምታ' : '✨ Special Offer / Greeting'}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-500 mb-1">${state.settings.lang === 'am' ? 'የመልዕክቱ ይዘት (ማስተካከል ይችላሉ)' : 'Message Text (Editable)'}</label>
+            <textarea id="notif-message-box" rows="4" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-xs leading-relaxed">${buildNotificationText(state.customers[0]?.id, 'reminder')}</textarea>
+          </div>
+
+          <!-- WhatsApp / Telegram / SMS Buttons -->
+          <div class="grid grid-cols-3 gap-2 pt-1">
+            <button onclick="sendCustomNotif('whatsapp')" class="py-2.5 px-2 rounded-xl bg-[#25D366] hover:opacity-95 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-sm">
+              <span>WhatsApp</span>
+            </button>
+            <button onclick="sendCustomNotif('telegram')" class="py-2.5 px-2 rounded-xl bg-[#229ED9] hover:opacity-95 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-sm">
+              <span>Telegram</span>
+            </button>
+            <button onclick="sendCustomNotif('sms')" class="py-2.5 px-2 rounded-xl bg-slate-700 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-sm">
+              <span>SMS</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildNotificationText(customerId, templateType) {
+      const cust = getCustomerById(customerId);
+      const salon = state.settings.lang === 'am' ? state.settings.salonNameAm : state.settings.salonNameEn;
+      const latestService = state.services.find(s => s.customerId === customerId);
+      const rem = latestService ? Math.max(0, latestService.price - latestService.advance) : 0;
+
+      if (state.settings.lang === 'am') {
+        if (templateType === 'reminder') {
+          return `ሰላም ${cust.name}፣ ከ${salon} ነው። ${latestService ? `በ${latestService.date} (${latestService.time || 'ቀን'}) ለ${latestService.serviceName} ያለዎትን ቀጠሮ እናስታውሳለን።` : 'የውበት ሳሎን ቀጠሮዎን እናስታውሳለን።'} በደስታ እንጠብቅዎታለን!`;
+        }
+        if (templateType === 'completed') {
+          return `ሰላም ${cust.name}፣ በ${salon} የነበረዎት አገልግሎት ተጠናቋል። ስለመረጡን እናመሰግናለን! በድጋሚ ይምጡ።`;
+        }
+        if (templateType === 'balance') {
+          return `ሰላም ${cust.name}፣ ከ${salon} ነው። ${rem > 0 ? `ቀሪ ክፍያ ${formatMoney(rem)} ብር እንዳለዎት በትህትና እናስታውሳለን።` : 'ክፍያዎን ስላጠናቀቁ እናመሰግናለን!'}`;
+        }
+        return `ሰላም ${cust.name}፣ በ${salon} ለደንበኞቻችን ልዩ የፀጉር እና የውበት አገልግሎት አዘጋጅተናል። ቀጠሮ ለመያዝ ይደውሉልን!`;
+      } else {
+        if (templateType === 'reminder') {
+          return `Hello ${cust.name}, reminder from ${salon} for your upcoming appointment${latestService ? ` on ${latestService.date} at ${latestService.time}` : ''}. We look forward to seeing you!`;
+        }
+        if (templateType === 'completed') {
+          return `Hello ${cust.name}, your beauty service at ${salon} is complete. Thank you for visiting us!`;
+        }
+        if (templateType === 'balance') {
+          return `Hello ${cust.name}, friendly reminder from ${salon} regarding your remaining balance of ${formatMoney(rem)} ETB.`;
+        }
+        return `Hello ${cust.name}, special beauty & hair care packages are now available at ${salon}!`;
+      }
+    }
+
+    function updateNotificationPreview() {
+      const custId = document.getElementById('notif-customer-select').value;
+      const tpl = document.getElementById('notif-template-select').value;
+      document.getElementById('notif-message-box').value = buildNotificationText(custId, tpl);
+    }
+
+    function sendCustomNotif(channel) {
+      const custId = document.getElementById('notif-customer-select').value;
+      const cust = getCustomerById(custId);
+      const text = document.getElementById('notif-message-box').value.trim();
+      dispatchExternalMessage(channel, cust.phone, text);
+    }
+
+    // --- 5J. SETTINGS VIEW (Matching Video Steps 45-48) ---
+    function renderSettingsView() {
+      return `
+        <h2 class="text-sm font-extrabold text-slate-800 dark:text-white">${t('modSettings')}</h2>
+
+        <!-- Appearance (Light / Dark) -->
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 space-y-2.5">
+          <div class="text-xs font-bold text-slate-600 dark:text-slate-300">${state.settings.lang === 'am' ? 'ገጽታ (Theme)' : 'Appearance'}</div>
+          <div class="grid grid-cols-2 gap-2.5">
+            <button onclick="state.settings.theme='light'; saveState(); renderCurrentTab();" class="py-3 rounded-xl border-2 text-xs font-bold flex items-center justify-center gap-2 transition ${
+              state.settings.theme === 'light' ? 'border-forest-800 bg-forest-50 text-forest-900' : 'border-slate-200 dark:border-slate-700 text-slate-500'
+            }">
+              ☀️ ${state.settings.lang === 'am' ? 'ብርሃን (Light)' : 'Light'}
+            </button>
+            <button onclick="state.settings.theme='dark'; saveState(); renderCurrentTab();" class="py-3 rounded-xl border-2 text-xs font-bold flex items-center justify-center gap-2 transition ${
+              state.settings.theme === 'dark' ? 'border-gold bg-slate-900 text-gold-light' : 'border-slate-200 dark:border-slate-700 text-slate-500'
+            }">
+              🌙 ${state.settings.lang === 'am' ? 'ጨለማ (Dark)' : 'Dark'}
+            </button>
+          </div>
+        </div>
+
+        <!-- Language (Amharic / English) -->
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 space-y-2.5">
+          <div class="text-xs font-bold text-slate-600 dark:text-slate-300">${state.settings.lang === 'am' ? 'ቋንቋ (Language)' : 'Language'}</div>
+          <div class="grid grid-cols-2 gap-2.5">
+            <button onclick="state.settings.lang='am'; saveState(); renderCurrentTab();" class="py-3 rounded-xl border-2 text-xs font-bold transition ${
+              state.settings.lang === 'am' ? 'border-forest-800 bg-forest-50 text-forest-900' : 'border-slate-200 dark:border-slate-700 text-slate-500'
+            }">
+              🇪🇹 አማርኛ
+            </button>
+            <button onclick="state.settings.lang='en'; saveState(); renderCurrentTab();" class="py-3 rounded-xl border-2 text-xs font-bold transition ${
+              state.settings.lang === 'en' ? 'border-forest-800 bg-forest-50 text-forest-900' : 'border-slate-200 dark:border-slate-700 text-slate-500'
+            }">
+              🌐 English
+            </button>
+          </div>
+        </div>
+
+        <!-- Salon Name -->
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 space-y-2.5">
+          <label class="block text-xs font-bold text-slate-600 dark:text-slate-300">${state.settings.lang === 'am' ? 'የሳሎን ስም (በደረሰኝ ላይ የሚታይ)' : 'Salon Name (Shown on Receipts)'}</label>
+          <input type="text" value="${state.settings.salonNameAm}" onchange="state.settings.salonNameAm=this.value; saveState(); showToast('የሳሎን ስም ተቀይሯል');"
+            class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold" />
+        </div>
+
+        <!-- Backup & Restore -->
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 space-y-2.5">
+          <div class="text-xs font-bold text-slate-600 dark:text-slate-300">💾 ${state.settings.lang === 'am' ? 'መረጃ መጠበቂያ (Backup & Reset)' : 'Data Backup & Reset'}</div>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="exportBackupJSON()" class="py-2.5 px-3 rounded-xl bg-forest-800 text-white text-xs font-bold">
+              ⬇️ ${state.settings.lang === 'am' ? 'መረጃ አውርድ' : 'Export JSON'}
+            </button>
+            <button onclick="confirmResetDemo()" class="py-2.5 px-3 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold">
+              🔄 ${state.settings.lang === 'am' ? 'ሙከራ መረጃ መልስ' : 'Reset Demo'}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 6. BOTTOM SHEETS & MODALS (CUSTOMER FORM, SERVICE FORM, RECEIPT, MORE)
+    // =========================================================================
+    function openModal(html) {
+      const backdrop = document.getElementById('modal-backdrop');
+      const sheet = document.getElementById('modal-sheet');
+      sheet.innerHTML = html;
+      backdrop.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal-backdrop').classList.add('hidden');
+    }
+
+    function openDrawer() {
+      document.getElementById('side-drawer').classList.remove('hidden');
+    }
+
+    function closeDrawer() {
+      document.getElementById('side-drawer').classList.add('hidden');
+    }
+
+    // --- 6A. MORE BOTTOM SHEET (6 Modules Grid Matching Video Step 30) ---
+    function openMoreSheet() {
+      const items = [
+        { tab: 'inventory', icon: '🧴', label: t('modInventory'), sub: 'Stock' },
+        { tab: 'expenses', icon: '💰', label: t('modExpenses'), sub: 'Profit' },
+        { tab: 'gallery', icon: '💇‍♀️', label: t('modGallery'), sub: 'Styles' },
+        { tab: 'reports', icon: '📊', label: t('modReports'), sub: 'Charts' },
+        { tab: 'notifications', icon: '🔔', label: t('modNotifications'), sub: 'WhatsApp/SMS' },
+        { tab: 'settings', icon: '⚙️', label: t('modSettings'), sub: 'Theme/Lang' }
+      ];
+
+      openModal(`
+        <div class="p-4">
+          <div class="w-10 h-1 bg-slate-300 rounded-full mx-auto mb-4"></div>
+          <div class="grid grid-cols-3 gap-2.5 pb-3">
+            ${items.map(it => `
+              <button onclick="closeModal(); navigateTo('${it.tab}');" class="bg-cream dark:bg-slate-900 hover:bg-forest-50 border border-slate-200/70 dark:border-slate-700 rounded-2xl p-3.5 flex flex-col items-center justify-center text-center transition active:scale-95">
+                <span class="text-2xl mb-1.5">${it.icon}</span>
+                <span class="text-[11px] font-bold text-slate-800 dark:text-white leading-tight">${it.label}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `);
+    }
+
+    // --- 6B. QUICK ADD CHOICE MODAL ---
+    function openQuickAddModal() {
+      openModal(`
+        <div class="p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-extrabold">${state.settings.lang === 'am' ? 'ፈጣን ምዝገባ' : 'Quick Action'}</h3>
+            <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xs">✕</button>
+          </div>
+          <button onclick="openCustomerFormModal()" class="w-full p-3.5 rounded-2xl bg-forest-50 dark:bg-forest-900/50 border border-forest-200 dark:border-forest-700 flex items-center gap-3 text-left">
+            <span class="text-xl">👤</span>
+            <div>
+              <div class="text-xs font-bold text-forest-900 dark:text-white">${t('newCustomer')}</div>
+              <div class="text-[10px] text-slate-500">${state.settings.lang === 'am' ? 'በስም እና ስልክ ብቻ በፍጥነት ይመዝግቡ' : 'Register with Name & Phone only'}</div>
+            </div>
+          </button>
+          <button onclick="openServiceFormModal()" class="w-full p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 flex items-center gap-3 text-left">
+            <span class="text-xl">✂️</span>
+            <div>
+              <div class="text-xs font-bold text-amber-950 dark:text-gold-light">${t('newService')}</div>
+              <div class="text-[10px] text-slate-500">${state.settings.lang === 'am' ? 'የፀጉር፣ ሹሩባ፣ ሜካፕ ወይም ጥፍር ቀጠሮ' : 'Hair, Braiding, Makeup or Nail appointment'}</div>
+            </div>
+          </button>
+        </div>
+      `);
+    }
+
+    // --- 6C. FAST 2-FIELD CUSTOMER REGISTRATION MODAL (User's Priority Request!) ---
+    function openCustomerFormModal() {
+      openModal(`
+        <div class="flex flex-col max-h-[85vh]">
+          <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between shrink-0">
+            <h3 class="text-sm font-extrabold text-slate-800 dark:text-white">${t('newCustomer')}</h3>
+            <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xs">✕</button>
+          </div>
+
+          <form onsubmit="submitCustomerForm(event)" class="p-5 overflow-y-auto app-scroll space-y-3.5">
+            <!-- Required Field 1: Full Name -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">${t('fullName')}</label>
+              <input id="cust-name" type="text" required placeholder="${state.settings.lang === 'am' ? 'ለምሳሌ፦ ሰላማዊት አለሙ' : 'e.g. Selamawit Alemu'}"
+                class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-3 text-xs font-semibold focus:outline-none focus:border-forest-700" />
+            </div>
+
+            <!-- Required Field 2: Phone Number -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">${t('phoneNumber')}</label>
+              <input id="cust-phone" type="tel" required placeholder="0912345678"
+                class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-3 text-xs font-semibold focus:outline-none focus:border-forest-700" />
+            </div>
+
+            <!-- Collapsible Optional Details Accordion -->
+            <div class="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+              <button type="button" onclick="document.getElementById('optional-cust-fields').classList.toggle('hidden')"
+                class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/70 text-left text-xs font-bold text-forest-800 dark:text-gold-light flex items-center justify-between">
+                <span>+ ${t('optionalDetails')}</span>
+                <span class="text-[10px]">▼</span>
+              </button>
+
+              <div id="optional-cust-fields" class="hidden p-3.5 space-y-3 bg-white dark:bg-slate-800">
+                <div class="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">${t('nickname')}</label>
+                    <input id="cust-nick" type="text" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">${t('address')}</label>
+                    <input id="cust-addr" type="text" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">${t('hairType')}</label>
+                    <select id="cust-hair-type" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 text-xs">
+                      <option value="">--</option>
+                      <option value="ተፈጥሯዊ (Natural)">ተፈጥሯዊ (Natural)</option>
+                      <option value="ለስላሳ (Relaxed/Silky)">ለስላሳ (Relaxed)</option>
+                      <option value="ጥቅልል (Curly)">ጥቅልል (Curly)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">${t('hairLength')}</label>
+                    <select id="cust-hair-len" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 text-xs">
+                      <option value="">--</option>
+                      <option value="አጭር (Short)">አጭር (Short)</option>
+                      <option value="መካከለኛ (Medium)">መካከለኛ (Medium)</option>
+                      <option value="ረጅም (Long)">ረጅም (Long)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">${t('hairDensity')}</label>
+                    <input id="cust-hair-den" type="text" placeholder="ወፍራም / ስስ" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">${t('hairColor')}</label>
+                    <input id="cust-hair-col" type="text" placeholder="ጥቁር / ቡናማ" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-500 mb-1">${t('productPref')}</label>
+                  <input id="cust-prod" type="text" placeholder="Shea Moisture, Keratin..." class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs" />
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-semibold text-slate-500 mb-1">${t('notes')}</label>
+                  <textarea id="cust-notes" rows="2" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 rounded-2xl bg-forest-800 hover:bg-forest-700 text-white font-bold text-xs shadow-md transition active:scale-[0.99]">
+              ✓ ${t('saveCustomer')}
+            </button>
+          </form>
+        </div>
+      `);
+    }
+
+    function submitCustomerForm(e) {
+      e.preventDefault();
+      const name = document.getElementById('cust-name').value.trim();
+      const phone = document.getElementById('cust-phone').value.trim();
+      if (!name || !phone) return;
+
+      const newCust = {
+        id: 'c' + Date.now(),
+        name,
+        phone,
+        nickname: document.getElementById('cust-nick').value.trim(),
+        address: document.getElementById('cust-addr').value.trim(),
+        hairType: document.getElementById('cust-hair-type').value,
+        hairLength: document.getElementById('cust-hair-len').value,
+        hairDensity: document.getElementById('cust-hair-den').value.trim(),
+        hairColor: document.getElementById('cust-hair-col').value.trim(),
+        productPref: document.getElementById('cust-prod').value.trim(),
+        notes: document.getElementById('cust-notes').value.trim(),
+        createdAt: new Date().toISOString().split('T')[0]
+      };
+
+      state.customers.unshift(newCust);
+      saveState();
+      closeModal();
+      renderCurrentTab();
+      showToast(state.settings.lang === 'am' ? 'ደንበኛው በተሳካ ሁኔታ ተመዝግቧል!' : 'Customer registered!');
+    }
+
+    // --- 6D. CUSTOMER PROFILE BOTTOM SHEET (Matching Video Steps 12-13) ---
+    function openCustomerProfileModal(custId) {
+      const cust = getCustomerById(custId);
+      const custServices = state.services.filter(s => s.customerId === custId);
+
+      openModal(`
+        <div class="flex flex-col max-h-[85vh]">
+          <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+            <h3 class="text-sm font-extrabold">${state.settings.lang === 'am' ? 'የደንበኛ መረጃ' : 'Customer Profile'}</h3>
+            <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xs">✕</button>
+          </div>
+
+          <div class="p-5 overflow-y-auto app-scroll space-y-4">
+            <div class="flex items-center gap-3.5">
+              <div class="w-14 h-14 rounded-2xl bg-forest-800 text-white font-extrabold text-lg flex items-center justify-center">
+                ${getInitials(cust.name)}
+              </div>
+              <div>
+                <div class="font-extrabold text-base text-slate-800 dark:text-white">${cust.name}</div>
+                <div class="text-xs text-slate-500 mt-0.5">📞 ${cust.phone} ${cust.address ? '• 📍 ' + cust.address : ''}</div>
+              </div>
+            </div>
+
+            <!-- Hair Profile Grid (Adapted from Video's Tailoring Measurements Grid) -->
+            <div class="bg-cream dark:bg-slate-900 rounded-2xl p-3.5 grid grid-cols-2 gap-2.5 text-xs">
+              <div>
+                <span class="text-[10px] text-slate-400 block">${t('hairType')}</span>
+                <span class="font-bold">${cust.hairType || '-'}</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 block">${t('hairLength')}</span>
+                <span class="font-bold">${cust.hairLength || '-'}</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 block">${t('hairDensity')}</span>
+                <span class="font-bold">${cust.hairDensity || '-'}</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 block">${t('productPref')}</span>
+                <span class="font-bold">${cust.productPref || '-'}</span>
+              </div>
+            </div>
+
+            ${cust.notes ? `
+              <div class="text-xs bg-amber-50 dark:bg-amber-950/30 border border-amber-200/70 rounded-xl p-3 text-amber-900 dark:text-amber-200">
+                📝 ${cust.notes}
+              </div>
+            ` : ''}
+
+            <!-- Service History -->
+            <div>
+              <div class="text-xs font-bold mb-2">${state.settings.lang === 'am' ? 'የአገልግሎት ታሪክ' : 'Service History'} (${custServices.length})</div>
+              <div class="space-y-2">
+                ${custServices.length === 0 ? `<p class="text-xs text-slate-400">${state.settings.lang === 'am' ? 'እስካሁን ምንም ቀጠሮ የለም' : 'No visits yet'}</p>` :
+                  custServices.map(s => `
+                    <div onclick="openReceiptModal('${s.id}')" class="cursor-pointer p-3 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between text-xs">
+                      <div>
+                        <div class="font-bold">${s.serviceName}</div>
+                        <div class="text-[10px] text-slate-400">${s.date} • ${formatMoney(s.price)} ${t('birr')}</div>
+                      </div>
+                      <span class="text-forest-800 dark:text-gold-light font-bold">🧾</span>
+                    </div>
+                  `).join('')}
+              </div>
+            </div>
+
+            <button onclick="openServiceFormModal('${cust.id}')" class="w-full py-3.5 rounded-2xl bg-forest-800 text-white font-bold text-xs shadow">
+              + ${t('newService')}
+            </button>
+          </div>
+        </div>
+      `);
+    }
+
+    // --- 6E. NEW APPOINTMENT / SERVICE MODAL ---
+    function openServiceFormModal(preselectedCustId = '') {
+      const today = new Date().toISOString().split('T')[0];
+      openModal(`
+        <div class="flex flex-col max-h-[86vh]">
+          <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between shrink-0">
+            <h3 class="text-sm font-extrabold">${t('newService')}</h3>
+            <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xs">✕</button>
+          </div>
+
+          <form onsubmit="submitServiceForm(event)" class="p-5 overflow-y-auto app-scroll space-y-3">
+            <div>
+              <label class="block text-xs font-bold mb-1">${t('selectCustomer')}</label>
+              <select id="srv-cust" required class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-3 text-xs font-semibold">
+                ${state.customers.map(c => `<option value="${c.id}" ${c.id === preselectedCustId ? 'selected' : ''}>${c.name} (${c.phone})</option>`).join('')}
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold mb-1">${t('serviceType')}</label>
+              <input id="srv-name" list="salon-services-list" required placeholder="${state.settings.lang === 'am' ? 'ለምሳሌ፦ የፀጉር ስራ / ሹሩባ / ሜካፕ' : 'e.g. Hair Styling / Braids'}"
+                class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-3 text-xs font-semibold" />
+              <datalist id="salon-services-list">
+                <option value="የፀጉር ስራ እና ትሪትመንት (Hair Styling)">
+                <option value="ሹሩባ እና ኤክስቴንሽን (Braiding)">
+                <option value="የጥፍር ውበት (Gel Nail Art)">
+                <option value="ሜካፕ (Makeup)">
+                <option value="የፊት ቆዳ እንክብካቤ (Facial)">
+                <option value="የፀጉር ቀለም (Hair Coloring)">
+              </datalist>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5">
+              <div>
+                <label class="block text-xs font-bold mb-1">${t('totalPrice')}</label>
+                <input id="srv-price" type="number" min="0" required placeholder="1500"
+                  class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold mb-1">${t('advancePaid')}</label>
+                <input id="srv-advance" type="number" min="0" value="0"
+                  class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5">
+              <div>
+                <label class="block text-xs font-bold mb-1">${t('appointmentDate')}</label>
+                <input id="srv-date" type="date" value="${today}"
+                  class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold mb-1">${t('appointmentTime')}</label>
+                <input id="srv-time" type="time" value="10:00"
+                  class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5">
+              <div>
+                <label class="block text-xs font-bold mb-1">${t('stylistName')}</label>
+                <input id="srv-stylist" type="text" value="ሰላም"
+                  class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold mb-1">${t('status')}</label>
+                <select id="srv-status" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs font-semibold">
+                  <option value="waiting">${t('filterWaiting')}</option>
+                  <option value="progress">${t('filterProgress')}</option>
+                  <option value="completed">${t('filterCompleted')}</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 rounded-2xl bg-forest-800 hover:bg-forest-700 text-white font-bold text-xs shadow-md mt-2">
+              ✓ ${t('saveService')}
+            </button>
+          </form>
+        </div>
+      `);
+    }
+
+    function submitServiceForm(e) {
+      e.preventDefault();
+      const nextNum = String(state.services.length + 1).padStart(4, '0');
+      const newSrv = {
+        id: 's' + Date.now(),
+        receiptNo: nextNum,
+        customerId: document.getElementById('srv-cust').value,
+        serviceName: document.getElementById('srv-name').value.trim(),
+        price: Number(document.getElementById('srv-price').value || 0),
+        advance: Number(document.getElementById('srv-advance').value || 0),
+        date: document.getElementById('srv-date').value,
+        time: document.getElementById('srv-time').value,
+        stylist: document.getElementById('srv-stylist').value.trim(),
+        status: document.getElementById('srv-status').value,
+        notes: ''
+      };
+
+      state.services.unshift(newSrv);
+      saveState();
+      closeModal();
+      renderCurrentTab();
+      showToast(state.settings.lang === 'am' ? 'ቀጠሮው ተመዝግቧል!' : 'Appointment saved!');
+    }
+
+    // --- 6F. RECEIPT MODAL WITH WHATSAPP, TELEGRAM & SMS SHARING (Matching Video Steps 23-24) ---
+    function buildReceiptShareText(s) {
+      const cust = getCustomerById(s.customerId);
+      const salon = state.settings.lang === 'am' ? state.settings.salonNameAm : state.settings.salonNameEn;
+      const rem = Math.max(0, s.price - s.advance);
+
+      if (state.settings.lang === 'am') {
+        return `🧾 *${salon} — ደረሰኝ #${s.receiptNo}*\n` +
+          `👤 ደንበኛ: ${cust.name}\n` +
+          `💇‍♀️ አገልግሎት: ${s.serviceName}\n` +
+          `💰 ጠቅላላ ዋጋ: ${formatMoney(s.price)} ብር\n` +
+          `✅ የተከፈለ: ${formatMoney(s.advance)} ብር\n` +
+          `⏳ ቀሪ ክፍያ: ${formatMoney(rem)} ብር\n` +
+          `📅 ቀን: ${s.date}\n` +
+          `🙏 ስለመረጡን እናመሰግናለን!`;
+      } else {
+        return `🧾 *${salon} — Receipt #${s.receiptNo}*\n` +
+          `👤 Customer: ${cust.name}\n` +
+          `💇‍♀️ Service: ${s.serviceName}\n` +
+          `💰 Total: ${formatMoney(s.price)} ETB\n` +
+          `✅ Paid: ${formatMoney(s.advance)} ETB\n` +
+          `⏳ Balance Due: ${formatMoney(rem)} ETB\n` +
+          `📅 Date: ${s.date}\n` +
+          `🙏 Thank you for visiting us!`;
+      }
+    }
+
+    function openReceiptModal(serviceId) {
+      const s = state.services.find(item => item.id === serviceId);
+      if (!s) return;
+      const cust = getCustomerById(s.customerId);
+      const salon = state.settings.lang === 'am' ? state.settings.salonNameAm : state.settings.salonNameEn;
+      const rem = Math.max(0, s.price - s.advance);
+
+      openModal(`
+        <div class="flex flex-col max-h-[90vh]">
+          <div class="px-5 py-3.5 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+            <h3 class="text-sm font-extrabold">${t('receipt')} #${s.receiptNo}</h3>
+            <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xs">✕</button>
+          </div>
+
+          <div class="p-5 overflow-y-auto app-scroll space-y-4">
+            <!-- Styled Receipt Card (Matching Video Step 23) -->
+            <div class="bg-cream dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-5 text-center space-y-3 shadow-inner">
+              <div class="w-11 h-11 rounded-2xl bg-forest-800 text-gold-light mx-auto flex items-center justify-center shadow">
+                ✂️
+              </div>
+              <div>
+                <div class="font-extrabold text-base text-slate-800 dark:text-white">${salon}</div>
+                <div class="text-[11px] text-slate-400">${t('receipt')} #${s.receiptNo}</div>
+              </div>
+
+              <div class="border-t border-dashed border-slate-300 dark:border-slate-700 pt-3 space-y-2 text-xs text-left">
+                <div class="flex justify-between">
+                  <span class="text-slate-500">${state.settings.lang === 'am' ? 'ደንበኛ' : 'Customer'}</span>
+                  <span class="font-bold">${cust.name}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-500">${state.settings.lang === 'am' ? 'አገልግሎት' : 'Service'}</span>
+                  <span class="font-bold text-right max-w-[60%]">${s.serviceName}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-500">${state.settings.lang === 'am' ? 'ጠቅላላ ዋጋ' : 'Total Price'}</span>
+                  <span class="font-bold">${formatMoney(s.price)} ${t('birr')}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-500">${state.settings.lang === 'am' ? 'ቅድመ / የተከፈለ' : 'Paid'}</span>
+                  <span class="font-bold text-emerald-700">${formatMoney(s.advance)} ${t('birr')}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-500">${state.settings.lang === 'am' ? 'ቀሪ ክፍያ' : 'Remaining'}</span>
+                  <span class="font-bold ${rem > 0 ? 'text-rose-600' : 'text-slate-600'}">${formatMoney(rem)} ${t('birr')}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-500">${state.settings.lang === 'am' ? 'ቀን' : 'Date'}</span>
+                  <span class="font-semibold">${s.date}</span>
+                </div>
+              </div>
+
+              <div class="border-t border-dashed border-slate-300 dark:border-slate-700 pt-3">
+                <div class="flex justify-between items-center text-sm font-extrabold">
+                  <span>${state.settings.lang === 'am' ? 'የተከፈለ ጠቅላላ' : 'Total Paid'}</span>
+                  <span class="text-forest-800 dark:text-emerald-400">${formatMoney(s.advance)} ${t('birr')}</span>
+                </div>
+                <div class="mt-2 inline-block px-3 py-1 rounded-full text-[10px] font-bold ${rem === 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                  ${rem === 0 ? '✓ ' + t('paidInFull') : (state.settings.lang === 'am' ? 'ቀሪ ክፍያ አለ' : 'Balance Pending')}
+                </div>
+                <p class="text-[11px] text-slate-400 mt-2">${t('thankYou')}</p>
+              </div>
+            </div>
+
+            <!-- Customer Phone Indicator -->
+            <div class="text-xs text-slate-500 flex items-center justify-between px-1">
+              <span>📞 ${cust.phone}</span>
+              ${rem > 0 ? `<button onclick="closeModal(); confirmPayBalance('${s.id}');" class="text-forest-800 dark:text-gold-light font-bold underline">${t('payRemaining')}</button>` : ''}
+            </div>
+
+            <!-- WhatsApp / Telegram / SMS / Copy Action Buttons (Matching Video Step 24) -->
+            <div class="space-y-2">
+              <button onclick="shareReceiptVia('whatsapp', '${s.id}')" class="w-full py-3 rounded-2xl bg-[#25D366] hover:opacity-95 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+                <span>💬</span> <span>${state.settings.lang === 'am' ? 'በWhatsApp ላክ' : 'Send via WhatsApp'}</span>
+              </button>
+
+              <div class="grid grid-cols-3 gap-2">
+                <button onclick="shareReceiptVia('telegram', '${s.id}')" class="py-2.5 rounded-xl bg-[#229ED9] hover:opacity-95 text-white font-bold text-xs flex items-center justify-center gap-1">
+                  <span>✈️</span> <span>Telegram</span>
+                </button>
+                <button onclick="shareReceiptVia('sms', '${s.id}')" class="py-2.5 rounded-xl bg-slate-700 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-1">
+                  <span>✉️</span> <span>SMS</span>
+                </button>
+                <button onclick="copyReceiptText('${s.id}')" class="py-2.5 rounded-xl bg-cream dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-800 dark:text-white font-bold text-xs flex items-center justify-center gap-1">
+                  <span>📋</span> <span>${t('copyText')}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `);
+    }
+
+    function shareReceiptVia(channel, serviceId) {
+      const s = state.services.find(item => item.id === serviceId);
+      if (!s) return;
+      const cust = getCustomerById(s.customerId);
+      const text = buildReceiptShareText(s);
+      dispatchExternalMessage(channel, cust.phone, text);
+    }
+
+    function dispatchExternalMessage(channel, phone, text) {
+      const encoded = encodeURIComponent(text);
+      const waPhone = formatEthiopianWhatsAppPhone(phone);
+
+      if (channel === 'whatsapp') {
+        window.open(`https://wa.me/${waPhone}?text=${encoded}`, '_blank');
+        showToast(state.settings.lang === 'am' ? 'WhatsApp እየተከፈተ ነው...' : 'Opening WhatsApp...');
+      } else if (channel === 'telegram') {
+        window.open(`https://t.me/share/url?url=${encodeURIComponent('https://selamsalon.app')}&text=${encoded}`, '_blank');
+        showToast(state.settings.lang === 'am' ? 'Telegram እየተከፈተ ነው...' : 'Opening Telegram...');
+      } else if (channel === 'sms') {
+        window.open(`sms:${phone}?body=${encoded}`, '_blank');
+        showToast(state.settings.lang === 'am' ? 'SMS እየተከፈተ ነው...' : 'Opening SMS...');
+      }
+    }
+
+    function copyReceiptText(serviceId) {
+      const s = state.services.find(item => item.id === serviceId);
+      if (!s) return;
+      const text = buildReceiptShareText(s);
+      const temp = document.createElement('textarea');
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      showToast(state.settings.lang === 'am' ? 'ደረሰኙ ተቀድቷል!' : 'Receipt copied to clipboard!');
+    }
+
+    // =========================================================================
+    // 7. CONFIRMATION DIALOGS (Matching Video Step 18)
+    // =========================================================================
+    function showConfirmDialog({ title, message, onConfirm }) {
+      const backdrop = document.getElementById('confirm-backdrop');
+      const box = document.getElementById('confirm-box');
+      box.innerHTML = `
+        <h4 class="text-sm font-extrabold text-slate-800 dark:text-white mb-1.5">${title}</h4>
+        <p class="text-xs text-slate-500 dark:text-slate-300 mb-5 leading-relaxed">${message}</p>
+        <div class="grid grid-cols-2 gap-2.5">
+          <button onclick="closeConfirm()" class="py-2.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold">
+            ${t('cancel')}
+          </button>
+          <button id="confirm-yes-btn" class="py-2.5 rounded-full bg-forest-800 text-white text-xs font-bold shadow">
+            ${t('confirm')}
+          </button>
+        </div>
+      `;
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+      document.getElementById('confirm-yes-btn').onclick = () => {
+        closeConfirm();
+        onConfirm();
+      };
+    }
+
+    function closeConfirm() {
+      const backdrop = document.getElementById('confirm-backdrop');
+      backdrop.classList.add('hidden');
+      backdrop.classList.remove('flex');
+    }
+
+    function confirmPayBalance(serviceId) {
+      const s = state.services.find(item => item.id === serviceId);
+      if (!s) return;
+      const rem = Math.max(0, s.price - s.advance);
+      showConfirmDialog({
+        title: state.settings.lang === 'am' ? 'ቀሪ ክፍያ?' : 'Pay Remaining Balance?',
+        message: state.settings.lang === 'am'
+          ? `ቀሪውን ${formatMoney(rem)} ብር ተቀብለዋል?`
+          : `Confirm payment of ${formatMoney(rem)} ETB remaining balance?`,
+        onConfirm: () => {
+          s.advance = s.price;
+          saveState();
+          renderCurrentTab();
+          showToast(state.settings.lang === 'am' ? 'ቀሪ ክፍያ ተመዝግቧል!' : 'Balance paid in full!');
+        }
+      });
+    }
+
+    function confirmToggleServiceStatus(serviceId, isChecked) {
+      const s = state.services.find(item => item.id === serviceId);
+      if (!s) return;
+      if (isChecked) {
+        showConfirmDialog({
+          title: state.settings.lang === 'am' ? 'አገልግሎቱ ተጠናቋል?' : 'Mark Service Completed?',
+          message: state.settings.lang === 'am'
+            ? 'ይህን አገልግሎት እንደተጠናቀቀ ምልክት ማድረግ ይፈልጋሉ?'
+            : 'Mark this salon service as completed?',
+          onConfirm: () => {
+            s.status = 'completed';
+            saveState();
+            renderCurrentTab();
+            showToast(state.settings.lang === 'am' ? 'አገልግሎቱ ተጠናቋል!' : 'Marked as completed!');
+          }
+        });
+      } else {
+        s.status = 'progress';
+        saveState();
+        renderCurrentTab();
+      }
+    }
+
+    // =========================================================================
+    // 8. SUB-MODULE MODALS (INVENTORY, EXPENSE, GALLERY, BACKUP)
+    // =========================================================================
+    function openAddInventoryModal() {
+      openModal(`
+        <div class="p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-extrabold">${state.settings.lang === 'am' ? 'አዲስ ዕቃ መጨመር' : 'Add Stock Item'}</h3>
+            <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs">✕</button>
+          </div>
+          <form onsubmit="submitInventory(event)" class="space-y-3">
+            <input id="inv-name" required placeholder="${state.settings.lang === 'am' ? 'የዕቃው ስም (ለምሳሌ፦ ሻምፖ)' : 'Item Name'}" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs" />
+            <div class="grid grid-cols-2 gap-2">
+              <input id="inv-qty" type="number" required value="5" placeholder="ብዛት" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs" />
+              <input id="inv-unit" value="ጠርሙስ" placeholder="መለኪያ (ፍሬ/ፓኬት)" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs" />
+            </div>
+            <button type="submit" class="w-full py-3 rounded-2xl bg-forest-800 text-white text-xs font-bold">✓ ${t('confirm')}</button>
+          </form>
+        </div>
+      `);
+    }
+
+    function submitInventory(e) {
+      e.preventDefault();
+      state.inventory.unshift({
+        id: 'i' + Date.now(),
+        name: document.getElementById('inv-name').value.trim(),
+        category: 'የሳሎን ዕቃ',
+        qty: Number(document.getElementById('inv-qty').value || 0),
+        minQty: 3,
+        unit: document.getElementById('inv-unit').value.trim() || 'ፍሬ'
+      });
+      saveState();
+      closeModal();
+      renderCurrentTab();
+      showToast(state.settings.lang === 'am' ? 'ዕቃው ተጨምሯል' : 'Item added');
+    }
+
+    function adjustStock(id, delta) {
+      const item = state.inventory.find(i => i.id === id);
+      if (!item) return;
+      item.qty = Math.max(0, item.qty + delta);
+      saveState();
+      renderCurrentTab();
+    }
+
+    function deleteInventory(id) {
+      state.inventory = state.inventory.filter(i => i.id !== id);
+      saveState();
+      renderCurrentTab();
+    }
+
+    function openAddExpenseModal() {
+      const today = new Date().toISOString().split('T')[0];
+      openModal(`
+        <div class="p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-extrabold">${state.settings.lang === 'am' ? 'አዲስ ወጪ መመዝገብ' : 'Log Expense'}</h3>
+            <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs">✕</button>
+          </div>
+          <form onsubmit="submitExpense(event)" class="space-y-3">
+            <input id="exp-title" required placeholder="${state.settings.lang === 'am' ? 'የወጪው ምክንያት' : 'Expense description'}" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs" />
+            <div class="grid grid-cols-2 gap-2">
+              <input id="exp-amount" type="number" required placeholder="መጠን (ብር)" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs" />
+              <input id="exp-date" type="date" value="${today}" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 rounded-xl px-3 py-2.5 text-xs" />
+            </div>
+            <button type="submit" class="w-full py-3 rounded-2xl bg-forest-800 text-white text-xs font-bold">✓ ${t('confirm')}</button>
+          </form>
+        </div>
+      `);
+    }
+
+    function submitExpense(e) {
+      e.preventDefault();
+      state.expenses.unshift({
+        id: 'e' + Date.now(),
+        title: document.getElementById('exp-title').value.trim(),
+        category: 'ወጪ',
+        amount: Number(document.getElementById('exp-amount').value || 0),
+        date: document.getElementById('exp-date').value
+      });
+      saveState();
+      closeModal();
+      renderCurrentTab();
+      showToast(state.settings.lang === 'am' ? 'ወጪው ተመዝግቧል' : 'Expense logged');
+    }
+
+    function deleteExpense(id) {
+      state.expenses = state.expenses.filter(e => e.id !== id);
+      saveState();
+      renderCurrentTab();
+    }
+
+    function openAddGalleryModal() {
+      openModal(`
+        <div class="p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-extrabold">${state.settings.lang === 'am' ? 'አዲስ ስታይል መጨመር' : 'Add Style Inspiration'}</h3>
+            <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs">✕</button>
+          </div>
+          <form onsubmit="submitGallery(event)" class="space-y-3">
+            <input id="gal-title" required placeholder="${state.settings.lang === 'am' ? 'የስታይሉ ስም (ለምሳሌ፦ ቦሆ ሹሩባ)' : 'Style Name'}" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs" />
+            <div class="grid grid-cols-2 gap-2">
+              <select id="gal-folder" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 rounded-xl px-3 py-2.5 text-xs">
+                <option value="ሹሩባ (Braids)">ሹሩባ (Braids)</option>
+                <option value="የፀጉር ስታይል (Hairstyles)">የፀጉር ስታይል</option>
+                <option value="ሜካፕ (Makeup)">ሜካፕ (Makeup)</option>
+                <option value="ጥፍር (Nail Art)">ጥፍር (Nail Art)</option>
+              </select>
+              <input id="gal-price" placeholder="1,500 ብር" class="w-full bg-cream dark:bg-slate-900 border border-slate-200 rounded-xl px-3 py-2.5 text-xs" />
+            </div>
+            <button type="submit" class="w-full py-3 rounded-2xl bg-forest-800 text-white text-xs font-bold">✓ ${t('confirm')}</button>
+          </form>
+        </div>
+      `);
+    }
+
+    function submitGallery(e) {
+      e.preventDefault();
+      const colors = ['#144535', '#C89D54', '#0F766E', '#6D28D9'];
+      state.gallery.unshift({
+        id: 'g' + Date.now(),
+        folder: document.getElementById('gal-folder').value,
+        title: document.getElementById('gal-title').value.trim(),
+        stylist: 'ሰላም',
+        price: document.getElementById('gal-price').value.trim() || '1,200 ብር',
+        color: colors[state.gallery.length % colors.length]
+      });
+      saveState();
+      closeModal();
+      renderCurrentTab();
+      showToast(state.settings.lang === 'am' ? 'ስታይሉ ተጨምሯል' : 'Style added');
+    }
+
+    function handleSearch(val) {
+      searchQuery = val;
+      renderCurrentTab();
+    }
+
+    function setServiceFilter(f) {
+      serviceFilter = f;
+      renderCurrentTab();
+    }
+
+    function exportBackupJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+      const a = document.createElement('a');
+      a.setAttribute("href", dataStr);
+      a.setAttribute("download", `selam-salon-backup-${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      showToast(state.settings.lang === 'am' ? 'Backup ፋይል ወርዷል!' : 'Backup exported!');
+    }
+
+    function confirmResetDemo() {
+      showConfirmDialog({
+        title: state.settings.lang === 'am' ? 'መረጃን ዳግም አስጀምር?' : 'Reset Demo Data?',
+        message: state.settings.lang === 'am'
+          ? 'ሁሉንም ወደ መጀመሪያው የሙከራ መረጃ መመለስ ይፈልጋሉ?'
+          : 'Restore all sample data to default?',
+        onConfirm: () => {
+          state = JSON.parse(JSON.stringify(DEFAULT_DATA));
+          saveState();
+          renderCurrentTab();
+          showToast(state.settings.lang === 'am' ? 'የሙከራ መረጃ ተመልሷል' : 'Demo data restored');
+        }
+      });
+    }
+
+    // Initialize App on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      updateHeaderAndKPIs();
+      renderCurrentTab();
+    });
+  </script>
+</body>
+</html>
